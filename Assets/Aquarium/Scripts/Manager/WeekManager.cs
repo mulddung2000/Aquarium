@@ -6,63 +6,74 @@ namespace Aquarium
     public class WeekManager : MonoBehaviour
     {
         #region Variables
-        [Header("Week Info")]
-        [SerializeField] private int weekIndex = 1;
 
-        [Header("References")]
+        [Header("Week Settings")]
+        [SerializeField] private int currentWeek = 1;
+
+        [Header("First Interaction")]
+        // 이번 주차의 첫 Interaction
+        [SerializeField] private GameObject firstInteraction;
         [SerializeField] private SceneFader sceneFader;
 
-        [Header("Week Start Settings")]
-        [SerializeField] private float fadeDuration = 1f;
-        [SerializeField] private GameObject firstInteraction;
         #endregion
+
 
         #region Unity Event Methods
+
         private void Start()
         {
-            StartWeek();
+            StartCoroutine(StartWeek());
         }
+
         #endregion
 
-        #region Custom Methods
-        /// <summary>
-        /// 주차 시작 진입점
-        /// </summary>
-        private void StartWeek()
+
+        #region Week Flow
+
+        private IEnumerator StartWeek()
         {
-            Debug.Log($"[WeekManager] Week {weekIndex} Start");
+            Debug.Log("[WeekManager] Week Start");
 
-            if (sceneFader != null)
-            {
-                sceneFader.FadeStart();
-            }
-            else
-            {
-                Debug.LogWarning("[WeekManager] SceneFader reference is missing.");
-            }
+            // 1️⃣ FadeIn 연출이 끝날 때까지 대기
+            yield return StartCoroutine(sceneFader.FadeIn());
 
-            // 페이드 종료 이후 첫 Interaction 활성화
-            StartCoroutine(WaitForFadeAndStartInteraction());
+            // 2️⃣ 연출이 끝난 뒤에만
+            //    Interaction 활성 + Goal 표시
+            ActivateFirstInteraction();
         }
 
-        /// <summary>
-        /// 페이드 연출 종료를 기다린 후
-        /// 첫 Interaction을 활성화한다
-        /// </summary>
-        private IEnumerator WaitForFadeAndStartInteraction()
+        private IEnumerator PlayWeekIntro()
         {
-            yield return new WaitForSeconds(fadeDuration);
+            // SceneFader의 페이드 아웃이 끝날 때까지 대기
+            sceneFader.FadeStart();   // FadeIn 시작
+            yield return null;        // (또는 연출 완료까지 기다리도록 나중에 개선)
+        }
 
-            if (firstInteraction != null)
-            {
-                firstInteraction.SetActive(true);
-                Debug.Log("[WeekManager] First Interaction Activated");
-            }
-            else
+        private void ActivateFirstInteraction()
+        {
+            if (firstInteraction == null)
             {
                 Debug.LogWarning("[WeekManager] First Interaction is not assigned.");
+                return;
+            }
+
+            firstInteraction.SetActive(true);
+
+            // ✅ 첫 목표 UI 표시
+            InteractiveObject interaction = firstInteraction.GetComponent<InteractiveObject>();
+            if (interaction != null)
+            {
+                UIManager.Instance.ShowGoal(interactionGoalText(interaction));
             }
         }
+
+        // ❗ goalText 접근을 명확히 분리 (가독성용)
+        private string interactionGoalText(InteractiveObject interaction)
+        {
+            // 현재는 단순 반환
+            return interaction.GetGoalText();
+        }
+
         #endregion
     }
 }
