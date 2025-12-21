@@ -11,14 +11,22 @@ namespace Aquarium
 
         #region Variables
         [Header("Goal UI")]
-        public GameObject textUI;               // GoalPanel (컨테이너)
-        public TextMeshProUGUI interactionText; // GoalText (실제 텍스트)
+        [SerializeField] private GameObject goalPanel;
+        [SerializeField] private TextMeshProUGUI goalText;
+
+        [Header("Hover UI")]
+        [SerializeField] private GameObject hoverPanel;
+        [SerializeField] private TextMeshProUGUI hoverText;
+
+        [Header("Day End UI")]
+        [SerializeField] private GameObject dayEndPanel;   // 🔹 추가
+
+        private bool isDialogueActive = false;
         #endregion
 
         #region Unity Event Methods
-        void Awake()
+        private void Awake()
         {
-            // Singleton 설정
             if (Instance == null)
                 Instance = this;
             else
@@ -26,25 +34,62 @@ namespace Aquarium
         }
         #endregion
 
-        #region Custom Methods
-
-        /// <summary>
-        /// 현재 해야 할 일(목표)을 UI에 표시
-        /// </summary>
-        public void ShowGoal(string message)
+        #region Hover UI
+        public void ShowHover(string text)
         {
-            interactionText.text = message;
-            textUI.SetActive(true);
+            if (isDialogueActive)
+                return;
+
+            hoverText.text = text;
+            hoverPanel.SetActive(true);
         }
 
-        /// <summary>
-        /// 목표 UI 숨김
-        /// </summary>
+        public void HideHover()
+        {
+            hoverPanel.SetActive(false);
+        }
+        #endregion
+
+        #region Goal UI
+        public void SetGoal(string text)
+        {
+            goalText.text = text;
+            goalPanel.SetActive(true);
+        }
+
         public void HideGoal()
         {
-            textUI.SetActive(false);
+            goalPanel.SetActive(false);
         }
+        #endregion
 
+        #region Dialogue State
+        public void SetDialogueState(bool active)
+        {
+            isDialogueActive = active;
+
+            if (active)
+            {
+                HideHover();
+                HideGoal();
+            }
+            else
+            {
+                goalPanel.SetActive(true);
+            }
+        }
+        #endregion
+
+        #region Day End
+        public void ShowDayEnd()
+        {
+            HideHover();
+
+            // 🔹 마지막 목표 표시
+            SetGoal("End Week");
+
+            dayEndPanel.SetActive(true);
+        }
         #endregion
     }
 }

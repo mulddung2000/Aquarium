@@ -1280,7 +1280,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneFader: {fileID: 470501281}
-  nextWeekSceneName: Week02
+  nextWeekSceneName: 
 --- !u!1 &1140239566
 GameObject:
   m_ObjectHideFlags: 0
@@ -2092,7 +2092,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fe6f0af65e59b443a08b4a25bcc73e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentWeek: 1
+  currentWeek: 2
   sceneFader: {fileID: 470501281}
   firstInteraction: {fileID: 669962789}
 --- !u!1 &1756414062
