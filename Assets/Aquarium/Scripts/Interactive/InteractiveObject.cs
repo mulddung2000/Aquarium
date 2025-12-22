@@ -1,49 +1,40 @@
-using TMPro;
 using UnityEngine;
-using System.Collections;
 
 namespace Aquarium
 {
     public class InteractiveObject : MonoBehaviour
     {
         #region Variables
-        [Header("Dialogue UI")]
-        [SerializeField] private GameObject dialoguePanel;
-        [SerializeField] private TextMeshProUGUI dialogueText;
+        [Header("Interaction Info")]
+        [SerializeField] private string interactionName;
+        [SerializeField] private string goalText;
 
-        [Header("Dialogue Lines (Inspector Input)")]
-        [SerializeField] private string[] dialogueLines;   // 🔹 Inspector에서 입력
+        [Header("Dialogue")]
+        // ❗ TextArea 제거 (배열에 사용하면 직렬화 깨짐)
+        [SerializeField] private string[] dialogueLines;
 
-        [Header("Goal")]
-        [SerializeField] private string goalText;          // 🔹 이 Interaction이 활성화되면 표시될 목표
-
-        [Header("Hover")]
-        [SerializeField] private string hoverText = "Interact";
+        [Header("Movement")]
+        [SerializeField] private Transform interactionPoint;
+        [SerializeField] private float interactionRadius = 1.2f;
 
         [Header("Next Interaction")]
         [SerializeField] private GameObject nextInteraction;
-
-        private int currentLineIndex = 0;
-        private bool isDialogueActive = false;
-        private bool canAdvanceDialogue = false;
         #endregion
 
-        #region Unity Event Methods
+        #region Properties (ACon 사용)
+        public Transform InteractionPoint => interactionPoint;
+        public float InteractionRadius => interactionRadius;
+        #endregion
+
+        #region Unity Events
         private void OnEnable()
         {
-            // 🔹 Interaction이 활성화되는 순간 = 현재 목표
-            if (!string.IsNullOrEmpty(goalText))
-            {
-                UIManager.Instance.SetGoal(goalText);
-            }
+            UIManager.Instance.SetGoal(goalText);
         }
 
         private void OnMouseEnter()
         {
-            if (!gameObject.activeSelf)
-                return;
-
-            UIManager.Instance.ShowHover(hoverText);
+            UIManager.Instance.ShowHover(interactionName);
         }
 
         private void OnMouseExit()
@@ -53,57 +44,102 @@ namespace Aquarium
 
         private void OnMouseDown()
         {
-            if (!Input.GetMouseButtonDown(0))
-                return;
-
-            if (!isDialogueActive)
-            {
-                StartDialogue();
-            }
-        }
-
-        private void Update()
-        {
-            if (!isDialogueActive || !canAdvanceDialogue)
-                return;
-
-            if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space))
-            {
-                AdvanceDialogue();
-            }
+            ACon.Instance.SetTargetInteraction(this);
         }
         #endregion
 
-        #region Dialogue Flow
-        private void StartDialogue()
+        #region Interaction
+        public void ExecuteInteraction()
         {
+            Debug.Log($"[DialogueLines] Count = {dialogueLines.Length}");
+            UIManager.Instance.ShowDialogue(
+                dialogueLines,
+                FinishInteraction
+            );
+        }
+
+        private void FinishInteraction()
+        {
+            if (nextInteraction != null)
+            {
+                nextInteraction.SetActive(true);
+            }
+            else
+            {
+                UIManager.Instance.ShowDayEnd();
+            }
+
+            gameObject.SetActive(false);
+        }
+        #endregion
+
+#if UNITY_EDITOR
+        private void OnDrawGizmosSelected()
+        {
+            if (interactionPoint == null) return;
+
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(interactionPoint.position, interactionRadius);
+        }
+#endif
+    }
+}
+/*using UnityEngine;
+
+namespace Aquarium
+{
+    public class InteractiveObject : MonoBehaviour
+    {
+        [Header("Interaction")]
+        [SerializeField] private Transform interactionPoint;
+        [SerializeField] private float interactionRadius = 1.2f;
+
+        [Header("Dialogue")]
+        [SerializeField] private string[] dialogueLines;
+
+        private int currentIndex;
+        private bool isDialogueActive;
+
+        public Transform InteractionPoint => interactionPoint;
+        public float InteractionRadius => interactionRadius;
+
+        private void OnMouseEnter()
+        {
+            UIManager.Instance.ShowHover(gameObject.name);
+        }
+
+        private void OnMouseExit()
+        {
+            UIManager.Instance.HideHover();
+        }
+
+        private void OnMouseDown()
+        {
+            ACon.Instance.MoveToInteraction(this);
+        }
+
+        public void ExecuteInteraction()
+        {
+            if (dialogueLines == null || dialogueLines.Length == 0)
+                return;
+
             isDialogueActive = true;
-            canAdvanceDialogue = false;
+            currentIndex = 0;
 
             UIManager.Instance.SetDialogueState(true);
-            UIManager.Instance.HideHover();
-
-            currentLineIndex = 0;
-
-            dialoguePanel.SetActive(true);
-            dialogueText.text = dialogueLines[currentLineIndex];
-
-            StartCoroutine(EnableAdvanceNextFrame());
+            UIManager.Instance.ShowDialogue(dialogueLines[currentIndex]);
         }
 
-        private IEnumerator EnableAdvanceNextFrame()
+        public void AdvanceDialogue()
         {
-            yield return null;
-            canAdvanceDialogue = true;
-        }
+            if (!isDialogueActive)
+                return;
 
-        private void AdvanceDialogue()
-        {
-            currentLineIndex++;
+            currentIndex++;
 
-            if (currentLineIndex < dialogueLines.Length)
+            if (currentIndex < dialogueLines.Length)
             {
-                dialogueText.text = dialogueLines[currentLineIndex];
+                UIManager.Instance.ShowDialogue(dialogueLines[currentIndex]);
             }
             else
             {
@@ -114,25 +150,10 @@ namespace Aquarium
         private void EndDialogue()
         {
             isDialogueActive = false;
-            canAdvanceDialogue = false;
 
-            dialoguePanel.SetActive(false);
+            UIManager.Instance.HideDialogue();
             UIManager.Instance.SetDialogueState(false);
-
-            // 🔹 다음 Interaction이 있으면 계속 진행
-            if (nextInteraction != null)
-            {
-                nextInteraction.SetActive(true);
-            }
-            else
-            {
-                // 🔹 마지막 Interaction → 주차 종료
-                UIManager.Instance.ShowDayEnd();
-            }
-
-            gameObject.SetActive(false);
         }
-
-        #endregion
     }
 }
+*/
