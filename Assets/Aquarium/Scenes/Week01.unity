@@ -973,8 +973,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb70e6a377af7cb4aa8918e7666a0d02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactionName: Fishtank
-  goalText: CheckFT
+  interactionName: Fish Tank
+  goalText: Check Fish Tank
   dialogueLines:
   - Feed Fish
   - Fish Eating
@@ -1328,7 +1328,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactionName: Fish Tank
-  goalText: check FT Again
+  goalText: Check Fish Tank Again
   dialogueLines:
   - Playing With Fish
   - Fish Happy
@@ -2795,7 +2795,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactionName: Mirror
-  goalText: check mirror
+  goalText: Check Mirror
   dialogueLines:
   - Looking Into Mirror
   - I Look Good
