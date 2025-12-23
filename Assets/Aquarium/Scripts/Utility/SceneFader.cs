@@ -13,7 +13,7 @@ namespace Aquarium
     {
         #region Variables
         public Image img;
-        public AnimationCurve curve;
+        public AnimationCurve curve; 
         #endregion
 
         #region Unity Event Method
@@ -100,6 +100,20 @@ namespace Aquarium
             if (buildIndex >= 0)
             {
                 SceneManager.LoadScene(buildIndex);
+            }
+        }
+
+        // 씬 이동 없는 순수 페이드 아웃
+        public IEnumerator FadeOutOnly()
+        {
+            float t = 0f;
+
+            while (t < 1f)
+            {
+                t += Time.deltaTime;
+                float a = curve.Evaluate(t);
+                img.color = new Color(0f, 0f, 0f, a);
+                yield return null;
             }
         }
 

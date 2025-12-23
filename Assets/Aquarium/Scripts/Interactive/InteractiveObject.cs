@@ -1,4 +1,4 @@
-using UnityEngine;
+/*using UnityEngine;
 
 namespace Aquarium
 {
@@ -50,12 +50,8 @@ namespace Aquarium
 
         #region Interaction
         public void ExecuteInteraction()
-        {
-            Debug.Log($"[DialogueLines] Count = {dialogueLines.Length}");
-            UIManager.Instance.ShowDialogue(
-                dialogueLines,
-                FinishInteraction
-            );
+        {            
+            UIManager.Instance.ShowDialogue(dialogueLines, FinishInteraction);
         }
 
         private void FinishInteraction()
@@ -83,29 +79,54 @@ namespace Aquarium
         }
 #endif
     }
-}
-/*using UnityEngine;
+}*/
+
+using UnityEngine;
 
 namespace Aquarium
 {
     public class InteractiveObject : MonoBehaviour
     {
-        [Header("Interaction")]
+        #region Inspector
+
+        [Header("Basic Info")]
+        [SerializeField] private string interactionName;
+        [SerializeField] private string goalText;
+
+        [Header("Dialogue (Door는 비워둠)")]
+        [SerializeField] private string[] dialogueLines;
+
+        [Header("Movement")]
         [SerializeField] private Transform interactionPoint;
         [SerializeField] private float interactionRadius = 1.2f;
 
-        [Header("Dialogue")]
-        [SerializeField] private string[] dialogueLines;
+        [Header("Door Option")]
+        [SerializeField] private bool isDoor = false;
+        [SerializeField] private Transform targetSpawnPos;
 
-        private int currentIndex;
-        private bool isDialogueActive;
+        [Header("Next Interaction")]
+        [SerializeField] private GameObject nextInteraction;
+
+        #endregion
+
+        #region Properties (ACon용)
 
         public Transform InteractionPoint => interactionPoint;
         public float InteractionRadius => interactionRadius;
 
+        #endregion
+
+        #region Unity Events
+
+        private void OnEnable()
+        {
+            if (!string.IsNullOrEmpty(goalText))
+                UIManager.Instance.SetGoal(goalText);
+        }
+
         private void OnMouseEnter()
         {
-            UIManager.Instance.ShowHover(gameObject.name);
+            UIManager.Instance.ShowHover(interactionName);
         }
 
         private void OnMouseExit()
@@ -115,45 +136,47 @@ namespace Aquarium
 
         private void OnMouseDown()
         {
-            ACon.Instance.MoveToInteraction(this);
+            ACon.Instance.SetTargetInteraction(this);
         }
+
+        #endregion
+
+        #region Interaction Core
 
         public void ExecuteInteraction()
         {
-            if (dialogueLines == null || dialogueLines.Length == 0)
+            // 🔹 Door 분기
+            if (isDoor)
+            {
+                TeleportManager.Instance.TeleportTo(targetSpawnPos);
+                FinishInteraction();
                 return;
+            }
 
-            isDialogueActive = true;
-            currentIndex = 0;
+            // 🔹 Dialogue Interaction
+            if (dialogueLines == null || dialogueLines.Length == 0)
+            {
+                FinishInteraction();
+                return;
+            }
 
-            UIManager.Instance.SetDialogueState(true);
-            UIManager.Instance.ShowDialogue(dialogueLines[currentIndex]);
+            UIManager.Instance.ShowDialogue(dialogueLines, FinishInteraction);
         }
 
-        public void AdvanceDialogue()
+        private void FinishInteraction()
         {
-            if (!isDialogueActive)
-                return;
-
-            currentIndex++;
-
-            if (currentIndex < dialogueLines.Length)
+            if (nextInteraction != null)
             {
-                UIManager.Instance.ShowDialogue(dialogueLines[currentIndex]);
+                nextInteraction.SetActive(true);
             }
             else
             {
-                EndDialogue();
+                UIManager.Instance.ShowDayEnd();
             }
+
+            gameObject.SetActive(false);
         }
 
-        private void EndDialogue()
-        {
-            isDialogueActive = false;
-
-            UIManager.Instance.HideDialogue();
-            UIManager.Instance.SetDialogueState(false);
-        }
+        #endregion
     }
 }
-*/

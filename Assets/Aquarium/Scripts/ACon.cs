@@ -1,4 +1,4 @@
-using UnityEngine;
+/*using UnityEngine;
 using UnityEngine.AI;
 
 namespace Aquarium
@@ -99,8 +99,8 @@ namespace Aquarium
         }
         #endregion
     }
-}
-/*using UnityEngine;
+}*/
+using UnityEngine;
 using UnityEngine.AI;
 
 namespace Aquarium
@@ -110,44 +110,64 @@ namespace Aquarium
         public static ACon Instance;
 
         private NavMeshAgent agent;
+
         private InteractiveObject currentTarget;
+        private bool isMovingToInteraction;
 
         private void Awake()
         {
-            Instance = this;
+            if (Instance == null)
+                Instance = this;
+            else
+                Destroy(gameObject);
+
             agent = GetComponent<NavMeshAgent>();
         }
 
         private void Update()
         {
-            // 자유 이동 (우클릭)
+            // 자유 이동
             if (Input.GetMouseButton(1))
             {
                 RayToWorld();
-                currentTarget = null;
+                ClearInteractionTarget();
             }
 
-            // Interaction 이동 중 도착 체크
-            if (currentTarget != null)
+            if (isMovingToInteraction && currentTarget != null)
             {
-                float dist = Vector3.Distance(
-                    transform.position,
-                    currentTarget.InteractionPoint.position
-                );
-
-                if (dist <= currentTarget.InteractionRadius)
-                {
-                    agent.ResetPath();
-                    currentTarget.ExecuteInteraction();
-                    currentTarget = null;
-                }
+                CheckInteractionDistance();
             }
         }
 
-        public void MoveToInteraction(InteractiveObject target)
+        public void SetTargetInteraction(InteractiveObject target)
         {
             currentTarget = target;
+            isMovingToInteraction = true;
+
             agent.SetDestination(target.InteractionPoint.position);
+        }
+
+        private void CheckInteractionDistance()
+        {
+            float distance = Vector3.Distance(
+                transform.position,
+                currentTarget.InteractionPoint.position
+            );
+
+            if (distance <= currentTarget.InteractionRadius)
+            {
+                agent.ResetPath();
+                isMovingToInteraction = false;
+
+                currentTarget.ExecuteInteraction();
+                currentTarget = null;
+            }
+        }
+
+        private void ClearInteractionTarget()
+        {
+            currentTarget = null;
+            isMovingToInteraction = false;
         }
 
         private void RayToWorld()
@@ -162,4 +182,4 @@ namespace Aquarium
         }
     }
 }
-*/
+
