@@ -653,8 +653,6 @@ MonoBehaviour:
   dialogueLines: []
   interactionPoint: {fileID: 1590051772}
   interactionRadius: 1.2
-  isDoor: 1
-  targetSpawnPos: {fileID: 1140652921}
   nextInteraction: {fileID: 2009264844}
 --- !u!1 &597517596
 GameObject:
@@ -917,8 +915,6 @@ MonoBehaviour:
   - Fish Eating
   interactionPoint: {fileID: 597517597}
   interactionRadius: 1.2
-  isDoor: 0
-  targetSpawnPos: {fileID: 0}
   nextInteraction: {fileID: 1799927691}
 --- !u!1 &752001849
 GameObject:
@@ -1032,8 +1028,6 @@ MonoBehaviour:
   - Bye
   interactionPoint: {fileID: 1117882966}
   interactionRadius: 1.2
-  isDoor: 0
-  targetSpawnPos: {fileID: 0}
   nextInteraction: {fileID: 881150836}
 --- !u!1 &840041151
 GameObject:
@@ -1148,8 +1142,6 @@ MonoBehaviour:
   dialogueLines: []
   interactionPoint: {fileID: 2103419498}
   interactionRadius: 1.2
-  isDoor: 1
-  targetSpawnPos: {fileID: 1140652921}
   nextInteraction: {fileID: 1320180552}
 --- !u!65 &881150839
 BoxCollider:
@@ -1245,8 +1237,6 @@ MonoBehaviour:
   - Fish Happy
   interactionPoint: {fileID: 597517597}
   interactionRadius: 1.2
-  isDoor: 0
-  targetSpawnPos: {fileID: 0}
   nextInteraction: {fileID: 587034051}
 --- !u!1 &888311509
 GameObject:
@@ -1306,8 +1296,6 @@ MonoBehaviour:
   - Good Night
   interactionPoint: {fileID: 597517597}
   interactionRadius: 1.2
-  isDoor: 0
-  targetSpawnPos: {fileID: 0}
   nextInteraction: {fileID: 0}
 --- !u!4 &888311512
 Transform:
@@ -1434,11 +1422,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5560200679006641063}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1046770924 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5345022872990310451, guid: e4ed3102cd83a63438e58c48506d265b, type: 3}
-  m_PrefabInstance: {fileID: 4259223368393901919}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1067953043
 GameObject:
   m_ObjectHideFlags: 0
@@ -2152,8 +2135,6 @@ MonoBehaviour:
   dialogueLines: []
   interactionPoint: {fileID: 1375649156}
   interactionRadius: 1.2
-  isDoor: 1
-  targetSpawnPos: {fileID: 846084242}
   nextInteraction: {fileID: 888311509}
 --- !u!65 &1302239301
 BoxCollider:
@@ -2251,8 +2232,6 @@ MonoBehaviour:
   - Bye Bye
   interactionPoint: {fileID: 1029698991}
   interactionRadius: 1.2
-  isDoor: 0
-  targetSpawnPos: {fileID: 0}
   nextInteraction: {fileID: 1302239298}
 --- !u!1 &1329500707
 GameObject:
@@ -2304,8 +2283,6 @@ MonoBehaviour:
   dialogueLines: []
   interactionPoint: {fileID: 1375649156}
   interactionRadius: 1.2
-  isDoor: 1
-  targetSpawnPos: {fileID: 173748713}
   nextInteraction: {fileID: 808746065}
 --- !u!65 &1329500710
 BoxCollider:
@@ -2480,7 +2457,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneFader: {fileID: 470501281}
-  player: {fileID: 1046770924}
+  playerAgent: {fileID: 1474276422}
+  player: {fileID: 1474276420}
 --- !u!1 &1435682299
 GameObject:
   m_ObjectHideFlags: 0
@@ -2515,6 +2493,11 @@ Transform:
 --- !u!4 &1474276420 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4177921833614921242, guid: e4ed3102cd83a63438e58c48506d265b, type: 3}
+  m_PrefabInstance: {fileID: 4259223368393901919}
+  m_PrefabAsset: {fileID: 0}
+--- !u!195 &1474276422 stripped
+NavMeshAgent:
+  m_CorrespondingSourceObject: {fileID: 6378078152628806204, guid: e4ed3102cd83a63438e58c48506d265b, type: 3}
   m_PrefabInstance: {fileID: 4259223368393901919}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1510284099
@@ -3015,8 +2998,6 @@ MonoBehaviour:
   - I Look Good
   interactionPoint: {fileID: 1119269206}
   interactionRadius: 1.2
-  isDoor: 0
-  targetSpawnPos: {fileID: 0}
   nextInteraction: {fileID: 883684885}
 --- !u!1 &1858792298
 GameObject:
@@ -3214,8 +3195,6 @@ MonoBehaviour:
   - Bye
   interactionPoint: {fileID: 1029698991}
   interactionRadius: 1.2
-  isDoor: 0
-  targetSpawnPos: {fileID: 0}
   nextInteraction: {fileID: 1329500707}
 --- !u!1 &2103419497
 GameObject:
@@ -13449,6 +13428,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1790770200741491256}
+  - {fileID: 6711209487674562862}
+  - {fileID: 8861748669026691791}
   - {fileID: 7209806670499788503}
   - {fileID: 7649661043382797127}
   - {fileID: 434023148613436974}
@@ -13460,7 +13442,6 @@ Transform:
   - {fileID: 5193400096882063202}
   - {fileID: 7777331877294864111}
   - {fileID: 7407826046254714009}
-  - {fileID: 8861748669026691791}
   - {fileID: 1373676948881921189}
   - {fileID: 334820815753673321}
   - {fileID: 9178291560540913390}
@@ -13471,9 +13452,7 @@ Transform:
   - {fileID: 8944826894392949217}
   - {fileID: 2439997050487922378}
   - {fileID: 5473115561857195923}
-  - {fileID: 6711209487674562862}
   - {fileID: 5767215769489304453}
-  - {fileID: 1790770200741491256}
   - {fileID: 4226688186190565950}
   - {fileID: 3377029421297680885}
   - {fileID: 6587559280790158901}

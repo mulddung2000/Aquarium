@@ -1,4 +1,4 @@
-using UnityEngine;
+/*using UnityEngine;
 using System.Collections;
 
 namespace Aquarium
@@ -68,5 +68,47 @@ namespace Aquarium
             isTeleporting = false;
         }
         #endregion
+    }
+}*/
+using UnityEngine;
+using System;
+using UnityEngine.AI;
+
+namespace Aquarium
+{
+    public class TeleportManager : MonoBehaviour
+    {
+        public static TeleportManager Instance;
+
+        [SerializeField] private SceneFader sceneFader;
+        [SerializeField] private NavMeshAgent playerAgent;
+        [SerializeField] private Transform player;
+
+        private Action onComplete;
+
+        private void Awake()
+        {
+            Instance = this;
+        }
+
+        public void Teleport(Transform spawnPoint, Action onFinish)
+        {
+            onComplete = onFinish;
+            StartCoroutine(TeleportRoutine(spawnPoint));
+        }
+
+        private System.Collections.IEnumerator TeleportRoutine(Transform spawn)
+        {
+            sceneFader.FadeStart();
+            yield return new WaitForSeconds(1f);
+
+            playerAgent.enabled = false;
+            player.position = spawn.position;
+            player.rotation = spawn.rotation;
+            playerAgent.enabled = true;
+
+            UIManager.Instance.SetState(UIState.None);
+            onComplete?.Invoke();
+        }
     }
 }
