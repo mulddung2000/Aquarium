@@ -190,7 +190,7 @@ namespace Aquarium
 
         private void Update()
         {
-            //  Dialogue ¡¯«‡ ¿‘∑¬ (¡¬≈¨∏Ø)
+            //  Dialogue ÏßÑÌñâ ÏûÖÎ†• (Ï¢åÌÅ¥Î¶≠)
             if (currentState == UIState.Dialogue && Input.GetMouseButtonDown(0))
             {
                 AdvanceDialogue();
@@ -199,16 +199,16 @@ namespace Aquarium
         #endregion
 
         #region State
-        public void SetState(UIState newState)
+        /*public void SetState(UIState newState)
         {
             currentState = newState;
 
-            // ∞¯≈Î ¡§∏Æ
+            // Í≥µÌÜµ Ï†ïÎ¶¨
             hoverPanel.SetActive(false);
             dialoguePanel.SetActive(false);
             dayEndPanel.SetActive(false);
 
-            //  «ŸΩ…: Dialogue ¡ﬂ Goal º˚±Ë
+            //  ÌïµÏã¨: Dialogue Ï§ë Goal Ïà®ÍπÄ
             if (newState == UIState.Dialogue)
             {
                 goalPanel.SetActive(false);
@@ -216,6 +216,41 @@ namespace Aquarium
             else
             {
                 goalPanel.SetActive(true);
+            }
+        }*/
+        public void SetState(UIState newState)
+        {
+            currentState = newState;
+
+            // Ï†ÑÎ∂Ä ÎÅÑÍ∏∞
+            hoverPanel.SetActive(false);
+            dialoguePanel.SetActive(false);
+            dayEndPanel.SetActive(false);
+
+            // Goal Í∏∞Î≥∏ Í∑úÏπô
+            goalPanel.SetActive(newState != UIState.Dialogue);
+
+            switch (newState)
+            {
+                case UIState.Hover:
+                    // HoverÎäî ShowHoverÏóêÏÑú Ï†úÏñ¥
+                    break;
+
+                case UIState.Dialogue:
+                    dialoguePanel.SetActive(true);
+                    break;
+
+                case UIState.DayEnd:
+                    dayEndPanel.SetActive(true);
+                    break;
+
+                case UIState.Teleport:
+                    // UI ÏóÜÏùå (ÏûÖÎ†• Ï∞®Îã®Ïö©)
+                    break;
+
+                case UIState.None:
+                default:
+                    break;
             }
         }
         #endregion
@@ -277,7 +312,7 @@ namespace Aquarium
             }
         }
 
-        private void EndDialogue()
+        /*private void EndDialogue()
         {
             dialoguePanel.SetActive(false);
             currentDialogueLines = null;
@@ -285,15 +320,30 @@ namespace Aquarium
             onDialogueEnd = null;
 
             SetState(UIState.None);
+        }*/
+        private void EndDialogue()
+        {
+            dialoguePanel.SetActive(false);
+            currentDialogueLines = null;
+
+            var callback = onDialogueEnd;
+            onDialogueEnd = null;
+
+            callback?.Invoke();
         }
         #endregion
 
         #region DayEnd
-        public void ShowDayEnd()
+        /*public void ShowDayEnd()
         {
             SetState(UIState.DayEnd);
             SetGoal("End Week");
             dayEndPanel.SetActive(true);
+        }*/
+        public void ShowDayEnd()
+        {
+            SetGoal("End Week");
+            SetState(UIState.DayEnd);
         }
         #endregion
     }

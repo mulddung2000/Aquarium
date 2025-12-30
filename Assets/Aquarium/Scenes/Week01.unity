@@ -651,6 +651,8 @@ MonoBehaviour:
   interactionName: Door
   goalText: Go To School
   dialogueLines: []
+  isDoor: 1
+  targetSpawnPoint: {fileID: 1140652921}
   interactionPoint: {fileID: 1590051772}
   interactionRadius: 1.2
   nextInteraction: {fileID: 2009264844}
@@ -913,6 +915,8 @@ MonoBehaviour:
   dialogueLines:
   - Feed Fish
   - Fish Eating
+  isDoor: 0
+  targetSpawnPoint: {fileID: 0}
   interactionPoint: {fileID: 597517597}
   interactionRadius: 1.2
   nextInteraction: {fileID: 1799927691}
@@ -1026,6 +1030,8 @@ MonoBehaviour:
   dialogueLines:
   - Hello
   - Bye
+  isDoor: 0
+  targetSpawnPoint: {fileID: 0}
   interactionPoint: {fileID: 1117882966}
   interactionRadius: 1.2
   nextInteraction: {fileID: 881150836}
@@ -1140,6 +1146,8 @@ MonoBehaviour:
   interactionName: BRoom Door
   goalText: Go To Door
   dialogueLines: []
+  isDoor: 1
+  targetSpawnPoint: {fileID: 1140652921}
   interactionPoint: {fileID: 2103419498}
   interactionRadius: 1.2
   nextInteraction: {fileID: 1320180552}
@@ -1235,6 +1243,8 @@ MonoBehaviour:
   dialogueLines:
   - Playing With Fish
   - Fish Happy
+  isDoor: 0
+  targetSpawnPoint: {fileID: 0}
   interactionPoint: {fileID: 597517597}
   interactionRadius: 1.2
   nextInteraction: {fileID: 587034051}
@@ -1294,6 +1304,8 @@ MonoBehaviour:
   dialogueLines:
   - Bye Fish
   - Good Night
+  isDoor: 0
+  targetSpawnPoint: {fileID: 0}
   interactionPoint: {fileID: 597517597}
   interactionRadius: 1.2
   nextInteraction: {fileID: 0}
@@ -2133,6 +2145,8 @@ MonoBehaviour:
   interactionName: School Door
   goalText: Go To Door
   dialogueLines: []
+  isDoor: 1
+  targetSpawnPoint: {fileID: 846084242}
   interactionPoint: {fileID: 1375649156}
   interactionRadius: 1.2
   nextInteraction: {fileID: 888311509}
@@ -2230,6 +2244,8 @@ MonoBehaviour:
   dialogueLines:
   - Hello Again
   - Bye Bye
+  isDoor: 0
+  targetSpawnPoint: {fileID: 0}
   interactionPoint: {fileID: 1029698991}
   interactionRadius: 1.2
   nextInteraction: {fileID: 1302239298}
@@ -2281,6 +2297,8 @@ MonoBehaviour:
   interactionName: School Door
   goalText: Go To Door
   dialogueLines: []
+  isDoor: 1
+  targetSpawnPoint: {fileID: 173748713}
   interactionPoint: {fileID: 1375649156}
   interactionRadius: 1.2
   nextInteraction: {fileID: 808746065}
@@ -2458,7 +2476,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneFader: {fileID: 470501281}
   playerAgent: {fileID: 1474276422}
-  player: {fileID: 1474276420}
 --- !u!1 &1435682299
 GameObject:
   m_ObjectHideFlags: 0
@@ -2996,6 +3013,8 @@ MonoBehaviour:
   dialogueLines:
   - Looking Into Mirror
   - I Look Good
+  isDoor: 0
+  targetSpawnPoint: {fileID: 0}
   interactionPoint: {fileID: 1119269206}
   interactionRadius: 1.2
   nextInteraction: {fileID: 883684885}
@@ -3193,6 +3212,8 @@ MonoBehaviour:
   dialogueLines:
   - Hello
   - Bye
+  isDoor: 0
+  targetSpawnPoint: {fileID: 0}
   interactionPoint: {fileID: 1029698991}
   interactionRadius: 1.2
   nextInteraction: {fileID: 1329500707}
