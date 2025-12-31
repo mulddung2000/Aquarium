@@ -22,6 +22,9 @@ namespace Aquarium
 
         [Header("Next Interaction")]
         [SerializeField] private GameObject nextInteraction;
+
+        [Header("Interaction ID (Save/Load)")]
+        [SerializeField] private string interactionID;
         #endregion
 
         #region Properties
@@ -53,10 +56,13 @@ namespace Aquarium
             ACon.Instance.SetTargetInteraction(this);
         }
         #endregion
-
+        
         #region Interaction
         public void ExecuteInteraction()
         {
+            // 현재 Interaction ID 등록 (Save 기준)
+            InteractionRegistry.SetCurrentInteraction(interactionID);
+
             // 🔹 Door Interaction
             if (isDoor)
             {
