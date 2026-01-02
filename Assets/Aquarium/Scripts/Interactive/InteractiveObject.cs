@@ -30,12 +30,14 @@ namespace Aquarium
         #region Properties
         public Transform InteractionPoint => interactionPoint;
         public float InteractionRadius => interactionRadius;
+        public string InteractionID => interactionID;
         #endregion
 
         #region Unity Events
         private void OnEnable()
         {
-            if (!string.IsNullOrEmpty(goalText))
+            // 🔹 이 Interaction이 "현재 목표"일 때만 Goal 갱신
+            if (!string.IsNullOrEmpty(goalText) && UIManager.Instance != null)
             {
                 UIManager.Instance.SetGoal(goalText);
             }
@@ -43,30 +45,31 @@ namespace Aquarium
 
         private void OnMouseEnter()
         {
-            UIManager.Instance.ShowHover(interactionName);
+            if (UIManager.Instance != null)
+                UIManager.Instance.ShowHover(interactionName);
         }
 
         private void OnMouseExit()
         {
-            UIManager.Instance.HideHover();
+            if (UIManager.Instance != null)
+                UIManager.Instance.HideHover();
         }
 
         private void OnMouseDown()
         {
-            ACon.Instance.SetTargetInteraction(this);
+            if (ACon.Instance != null)
+                ACon.Instance.SetTargetInteraction(this);
         }
         #endregion
-        
+
         #region Interaction
         public void ExecuteInteraction()
         {
-            // 현재 Interaction ID 등록 (Save 기준)
-            InteractionRegistry.SetCurrentInteraction(interactionID);
-
-            // 🔹 Door Interaction
+            // Door Interaction
             if (isDoor)
             {
                 UIManager.Instance.SetState(UIState.Teleport);
+
                 TeleportManager.Instance.Teleport(
                     targetSpawnPoint,
                     OnTeleportFinished
@@ -74,7 +77,7 @@ namespace Aquarium
                 return;
             }
 
-            // 🔹 Dialogue Interaction
+            // Dialogue Interaction
             if (dialogueLines == null || dialogueLines.Length == 0)
             {
                 FinishInteraction();
@@ -96,19 +99,36 @@ namespace Aquarium
 
         private void FinishInteraction()
         {
+            // 🔹 UI 정리
             UIManager.Instance.SetState(UIState.None);
 
+            // 🔹 다음 Interaction 처리
             if (nextInteraction != null)
             {
                 nextInteraction.SetActive(true);
+
+                // ✅ 저장 기준 Interaction ID는 "다음 Interaction"
+                var nextIO = nextInteraction.GetComponent<InteractiveObject>();
+                if (nextIO != null)
+                {
+                    InteractionRegistry.SetCurrentInteraction(nextIO.InteractionID);
+                }
             }
             else
             {
+                // 다음 Interaction이 없으면 DayEnd
                 UIManager.Instance.ShowDayEnd();
                 return;
             }
 
+            // 🔹 현재 Interaction 비활성화
             gameObject.SetActive(false);
+
+            // 🔹 저장 (Interaction 완료 시점)
+            if (SaveManager.Instance != null)
+            {
+                SaveManager.Instance.SaveGame();
+            }
         }
         #endregion
 
@@ -123,4 +143,3 @@ namespace Aquarium
 #endif
     }
 }
-

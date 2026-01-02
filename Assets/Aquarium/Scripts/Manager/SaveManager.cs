@@ -1,7 +1,6 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.AI;
 using System.IO;
+using UnityEngine.SceneManagement;
 
 namespace Aquarium
 {
@@ -9,10 +8,13 @@ namespace Aquarium
     {
         public static SaveManager Instance;
 
+        private int currentSlotIndex = -1;
         private SaveData pendingLoadData;
 
-        private const int SLOT_COUNT = 3;
-        private const string SAVE_FOLDER = "Saves";
+        public bool IsLoading { get; private set; }
+
+        private string SavePath =>
+            Path.Combine(Application.persistentDataPath, "saves");
 
         private void Awake()
         {
@@ -27,110 +29,94 @@ namespace Aquarium
             }
         }
 
-        #region Path
-
-        private string GetSaveFolderPath()
+        #region Slot
+        public void SetCurrentSlot(int slotIndex)
         {
-            return Path.Combine(Application.persistentDataPath, SAVE_FOLDER);
+            currentSlotIndex = slotIndex;
         }
 
-        private string GetSavePath(int slot)
+        public bool HasSave(int slotIndex)
         {
-            return Path.Combine(GetSaveFolderPath(), $"slot_{slot}.json");
+            return File.Exists(GetSlotPath(slotIndex));
         }
-
         #endregion
 
         #region Save
-
-        public void SaveGame(int slot)
+        public void SaveGame()
         {
-            if (slot < 1 || slot > SLOT_COUNT)
+            if (currentSlotIndex < 0)
             {
-                Debug.LogError("[SaveManager] Invalid slot index");
+                Debug.LogError("[SaveManager] No slot selected.");
                 return;
             }
 
-            if (!Directory.Exists(GetSaveFolderPath()))
-                Directory.CreateDirectory(GetSaveFolderPath());
+            if (!Directory.Exists(SavePath))
+                Directory.CreateDirectory(SavePath);
 
-            WeekManager weekManager = FindFirstObjectByType<WeekManager>();
+            WeekManager weekManager = Object.FindFirstObjectByType<WeekManager>();
+            GameObject player = GameObject.FindWithTag("Player");
+
+            string goalText = UIManager.Instance != null
+                ? UIManager.Instance.GetCurrentGoalText()
+                : "";
 
             SaveData data = new SaveData
             {
-                week = weekManager != null ? weekManager.GetCurrentWeek() : 1,
                 sceneName = SceneManager.GetActiveScene().name,
-                playerPosition = ACon.Instance.transform.position,
-                interactionID = InteractionRegistry.GetCurrentInteractionID(),
-                locationID = LocationRegistry.CurrentLocationID,
-                uiState = UIState.None
+                currentWeek = weekManager != null ? weekManager.GetCurrentWeek() : 1,
+                nextInteractionID = InteractionRegistry.GetCurrentInteraction(),
+                playerPosition = player != null ? player.transform.position : Vector3.zero,
+                goalText = goalText,
+                saveDateTime = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm")
             };
 
-            File.WriteAllText(GetSavePath(slot), JsonUtility.ToJson(data, true));
-
-            Debug.Log($"[SaveManager] Saved Slot {slot}");
+            File.WriteAllText(GetSlotPath(currentSlotIndex), JsonUtility.ToJson(data, true));
+            Debug.Log($"[SaveManager] Game Saved (Slot {currentSlotIndex})");
         }
-
         #endregion
 
-        #region Load
-
-        public bool HasSave(int slot)
+        #region Load (Prepare Only)
+        public void PrepareLoad(int slotIndex)
         {
-            return File.Exists(GetSavePath(slot));
-        }
-
-        public void LoadGame(int slot)
-        {
-            if (!HasSave(slot))
-            {
-                Debug.LogError("[SaveManager] No save data");
+            if (!HasSave(slotIndex))
                 return;
-            }
 
-            pendingLoadData = JsonUtility.FromJson<SaveData>(
-                File.ReadAllText(GetSavePath(slot))
-            );
+            currentSlotIndex = slotIndex;
 
-            SceneManager.sceneLoaded += OnSceneLoaded;
-            SceneManager.LoadScene(pendingLoadData.sceneName);
+            string json = File.ReadAllText(GetSlotPath(slotIndex));
+            pendingLoadData = JsonUtility.FromJson<SaveData>(json);
+
+            IsLoading = true;
         }
 
-        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        public bool HasPendingLoad()
         {
-            SceneManager.sceneLoaded -= OnSceneLoaded;
+            return IsLoading && pendingLoadData != null;
+        }
 
-            RestorePlayerPosition(pendingLoadData.playerPosition);
-
-            InteractionRegistry.RestoreInteraction(pendingLoadData.interactionID);
-            LocationRegistry.CurrentLocationID = pendingLoadData.locationID;
-
-            UIManager.Instance.SetState(pendingLoadData.uiState);
-
+        public SaveData ConsumeLoadData()
+        {
+            SaveData data = pendingLoadData;
             pendingLoadData = null;
-
-            Debug.Log("[SaveManager] Load Complete");
+            IsLoading = false;
+            return data;
         }
-
-        private void RestorePlayerPosition(Vector3 savedPos)
-        {
-            NavMeshAgent agent = ACon.Instance.GetComponent<NavMeshAgent>();
-
-            agent.enabled = false;
-
-            if (NavMesh.SamplePosition(savedPos, out NavMeshHit hit, 2f, NavMesh.AllAreas))
-            {
-                agent.transform.position = hit.position;
-            }
-            else
-            {
-                agent.transform.position = savedPos;
-            }
-
-            agent.enabled = true;
-            agent.ResetPath();
-        }
-
         #endregion
+
+        public SaveData GetSaveData(int slotIndex)
+        {
+            string path = GetSlotPath(slotIndex);
+
+            if (!File.Exists(path))
+                return null;
+
+            string json = File.ReadAllText(path);
+            return JsonUtility.FromJson<SaveData>(json);
+        }
+
+        private string GetSlotPath(int slotIndex)
+        {
+            return Path.Combine(SavePath, $"slot_{slotIndex}.json");
+        }
     }
 }

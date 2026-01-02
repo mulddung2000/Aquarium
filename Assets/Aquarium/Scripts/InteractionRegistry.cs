@@ -11,15 +11,9 @@ namespace Aquarium
             currentInteractionID = id;
         }
 
-        public static string GetCurrentInteractionID()
+        public static string GetCurrentInteraction()
         {
             return currentInteractionID;
-        }
-
-        public static void RestoreInteraction(string id)
-        {
-            currentInteractionID = id;
-            // 실제 활성화는 InteractiveObjectManager 단계에서 처리
         }
     }
 }

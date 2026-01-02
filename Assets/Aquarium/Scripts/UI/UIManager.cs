@@ -125,6 +125,11 @@ namespace Aquarium
             goalText.text = text;
             goalPanel.SetActive(true);
         }
+        public string GetCurrentGoalText()
+        {
+            return goalText != null ? goalText.text : "";
+        }
+
         #endregion
 
         #region Dialogue

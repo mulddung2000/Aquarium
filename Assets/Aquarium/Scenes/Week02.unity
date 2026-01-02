@@ -656,6 +656,7 @@ MonoBehaviour:
   interactionPoint: {fileID: 1590051772}
   interactionRadius: 1.2
   nextInteraction: {fileID: 2009264844}
+  interactionID: W02_Room_Door_01
 --- !u!1 &597517596
 GameObject:
   m_ObjectHideFlags: 0
@@ -920,6 +921,7 @@ MonoBehaviour:
   interactionPoint: {fileID: 597517597}
   interactionRadius: 1.2
   nextInteraction: {fileID: 1799927691}
+  interactionID: W02_ROOM_FISHTANK_01
 --- !u!1 &752001849
 GameObject:
   m_ObjectHideFlags: 0
@@ -1035,6 +1037,7 @@ MonoBehaviour:
   interactionPoint: {fileID: 1117882966}
   interactionRadius: 1.2
   nextInteraction: {fileID: 881150836}
+  interactionID: W02_BRoom_BRoomNPC_01
 --- !u!1 &840041151
 GameObject:
   m_ObjectHideFlags: 0
@@ -1151,6 +1154,7 @@ MonoBehaviour:
   interactionPoint: {fileID: 2103419498}
   interactionRadius: 1.2
   nextInteraction: {fileID: 1320180552}
+  interactionID: W02_BRoom_Door_01
 --- !u!65 &881150839
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1248,6 +1252,7 @@ MonoBehaviour:
   interactionPoint: {fileID: 597517597}
   interactionRadius: 1.2
   nextInteraction: {fileID: 587034051}
+  interactionID: W02_ROOM_FISHTANK_02
 --- !u!1 &888311509
 GameObject:
   m_ObjectHideFlags: 0
@@ -1309,6 +1314,7 @@ MonoBehaviour:
   interactionPoint: {fileID: 597517597}
   interactionRadius: 1.2
   nextInteraction: {fileID: 0}
+  interactionID: W02_ROOM_FISHTANK_03
 --- !u!4 &888311512
 Transform:
   m_ObjectHideFlags: 0
@@ -2151,6 +2157,7 @@ MonoBehaviour:
   interactionPoint: {fileID: 1375649156}
   interactionRadius: 1.2
   nextInteraction: {fileID: 888311509}
+  interactionID: W02_School_Door_02
 --- !u!65 &1302239301
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2250,6 +2257,7 @@ MonoBehaviour:
   interactionPoint: {fileID: 1029698991}
   interactionRadius: 1.2
   nextInteraction: {fileID: 1302239298}
+  interactionID: W02_School_SchoolNPC_02
 --- !u!1 &1329500707
 GameObject:
   m_ObjectHideFlags: 0
@@ -2303,6 +2311,7 @@ MonoBehaviour:
   interactionPoint: {fileID: 1375649156}
   interactionRadius: 1.2
   nextInteraction: {fileID: 808746065}
+  interactionID: W02_School_Door_01
 --- !u!65 &1329500710
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3017,7 +3026,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fe6f0af65e59b443a08b4a25bcc73e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentWeek: 1
+  currentWeek: 2
   sceneFader: {fileID: 470501281}
   firstInteraction: {fileID: 669962789}
 --- !u!1 &1756414062
@@ -3170,6 +3179,7 @@ MonoBehaviour:
   interactionPoint: {fileID: 1119269206}
   interactionRadius: 1.2
   nextInteraction: {fileID: 883684885}
+  interactionID: W02_ROOM_Mirror_01
 --- !u!1 &1858792298
 GameObject:
   m_ObjectHideFlags: 0
@@ -3369,6 +3379,7 @@ MonoBehaviour:
   interactionPoint: {fileID: 1029698991}
   interactionRadius: 1.2
   nextInteraction: {fileID: 1329500707}
+  interactionID: W02_School_SchoolNPC_01
 --- !u!1 &2103419497
 GameObject:
   m_ObjectHideFlags: 0

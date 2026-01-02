@@ -1,19 +1,17 @@
-using System;
 using UnityEngine;
 
 namespace Aquarium
 {
-    [Serializable]
+    [System.Serializable]
     public class SaveData
     {
-        public int week;
         public string sceneName;
-
-        public string interactionID;
-
+        public int currentWeek;
         public Vector3 playerPosition;
+        public string nextInteractionID;
 
-        public string locationID;
-        public UIState uiState;
+        // 슬롯 UI 표시용
+        public string goalText;
+        public string saveDateTime;
     }
 }
