@@ -16,16 +16,14 @@ namespace Aquarium
 
         private void Start()
         {
-            Debug.Log("[WeekManager] Scene Start");
-
-            // 🔒 Load 중이면 절대 초기화하지 않는다
+            // Load 중이면 초기화 금지
             if (SaveManager.Instance != null && SaveManager.Instance.HasPendingLoad())
             {
                 StartCoroutine(SceneStartFlow());
                 return;
             }
 
-            // 🔹 New Game 초기화
+            // New Game 초기화
             if (firstInteraction != null)
                 firstInteraction.SetActive(false);
 
@@ -34,33 +32,36 @@ namespace Aquarium
 
         private IEnumerator SceneStartFlow()
         {
-            // 🔹 Fade In
+            // Fade In
             if (sceneFader != null)
                 sceneFader.FadeStart();
 
             yield return new WaitForSeconds(1f);
 
-            // 🔹 Load 우선 처리
+            // Load 우선 처리
             if (SaveManager.Instance != null && SaveManager.Instance.HasPendingLoad())
             {
                 ApplyLoadedData(SaveManager.Instance.ConsumeLoadData());
                 yield break;
             }
 
-            // 🔹 New Game Start
-            Debug.Log("[WeekManager] New Game Start");
-
+            // New Game Start
             if (firstInteraction != null)
                 firstInteraction.SetActive(true);
         }
 
         private void ApplyLoadedData(SaveData data)
         {
-            // Week
+            // Week 복구
             currentWeek = data.currentWeek;
-            Debug.Log($"[WeekManager] Week restored: {currentWeek}");
 
-            // Player
+            // Location 복구
+            if (!string.IsNullOrEmpty(data.locationID))
+            {
+                InteractionRegistry.SetCurrentLocation(data.locationID);
+            }
+
+            // Player 위치 복구
             GameObject player = GameObject.FindWithTag("Player");
             if (player != null)
             {
@@ -71,7 +72,7 @@ namespace Aquarium
                     player.transform.position = data.playerPosition;
             }
 
-            // Interaction 복구 (비활성 포함 검색)
+            // Interaction 복구 (비활성 포함)
             var interactions =
                 Object.FindObjectsByType<InteractiveObject>(
                     FindObjectsInactive.Include,
@@ -84,7 +85,7 @@ namespace Aquarium
                 io.gameObject.SetActive(active);
             }
 
-            // Registry 복구
+            // Interaction Registry 복구
             InteractionRegistry.SetCurrentInteraction(data.nextInteractionID);
 
             // Goal 복구

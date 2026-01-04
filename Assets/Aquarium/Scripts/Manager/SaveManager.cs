@@ -65,12 +65,17 @@ namespace Aquarium
                 sceneName = SceneManager.GetActiveScene().name,
                 currentWeek = weekManager != null ? weekManager.GetCurrentWeek() : 1,
                 nextInteractionID = InteractionRegistry.GetCurrentInteraction(),
+                locationID = InteractionRegistry.GetCurrentLocation(),
                 playerPosition = player != null ? player.transform.position : Vector3.zero,
                 goalText = goalText,
                 saveDateTime = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm")
             };
 
-            File.WriteAllText(GetSlotPath(currentSlotIndex), JsonUtility.ToJson(data, true));
+            File.WriteAllText(
+                GetSlotPath(currentSlotIndex),
+                JsonUtility.ToJson(data, true)
+            );
+
             Debug.Log($"[SaveManager] Game Saved (Slot {currentSlotIndex})");
         }
         #endregion

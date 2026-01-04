@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 using System;
 
 namespace Aquarium
@@ -29,7 +30,8 @@ namespace Aquarium
         [SerializeField] private TextMeshProUGUI hoverText;
 
         [Header("Dialogue UI")]
-        [SerializeField] private GameObject dialoguePanel;
+        [SerializeField] private GameObject dialogueContainer;
+        [SerializeField] private Image dialogueCharacterImage;
         [SerializeField] private TextMeshProUGUI dialogueText;
 
         [Header("Day End UI")]
@@ -37,7 +39,7 @@ namespace Aquarium
 
         private UIState currentState = UIState.None;
 
-        private string[] currentDialogueLines;
+        private DialogueLine[] currentDialogueLines;
         private int currentDialogueIndex;
         private Action onDialogueEnd;
         #endregion
@@ -49,11 +51,12 @@ namespace Aquarium
                 Instance = this;
             else
                 Destroy(gameObject);
+
+            dialogueContainer.SetActive(false);
         }
 
         private void Update()
         {
-            //  Dialogue 진행 입력 (좌클릭)
             if (currentState == UIState.Dialogue && Input.GetMouseButtonDown(0))
             {
                 AdvanceDialogue();
@@ -62,39 +65,24 @@ namespace Aquarium
         #endregion
 
         #region State
-        
         public void SetState(UIState newState)
         {
             currentState = newState;
 
-            // 전부 끄기
             hoverPanel.SetActive(false);
-            dialoguePanel.SetActive(false);
+            dialogueContainer.SetActive(false);
             dayEndPanel.SetActive(false);
 
-            // Goal 기본 규칙
             goalPanel.SetActive(newState != UIState.Dialogue);
 
             switch (newState)
             {
-                case UIState.Hover:
-                    // Hover는 ShowHover에서 제어
-                    break;
-
                 case UIState.Dialogue:
-                    dialoguePanel.SetActive(true);
+                    dialogueContainer.SetActive(true);
                     break;
 
                 case UIState.DayEnd:
                     dayEndPanel.SetActive(true);
-                    break;
-
-                case UIState.Teleport:
-                    // UI 없음 (입력 차단용)
-                    break;
-
-                case UIState.None:
-                default:
                     break;
             }
         }
@@ -125,15 +113,15 @@ namespace Aquarium
             goalText.text = text;
             goalPanel.SetActive(true);
         }
+
         public string GetCurrentGoalText()
         {
             return goalText != null ? goalText.text : "";
         }
-
         #endregion
 
         #region Dialogue
-        public void ShowDialogue(string[] lines, Action onEnd)
+        public void ShowDialogue(DialogueLine[] lines, Action onEnd)
         {
             if (lines == null || lines.Length == 0)
                 return;
@@ -144,26 +132,41 @@ namespace Aquarium
 
             SetState(UIState.Dialogue);
 
-            dialoguePanel.SetActive(true);
-            dialogueText.text = currentDialogueLines[currentDialogueIndex];
+            ShowCurrentDialogue();
+        }
+
+        private void ShowCurrentDialogue()
+        {
+            if (currentDialogueIndex >= currentDialogueLines.Length)
+            {
+                EndDialogue();
+                return;
+            }
+
+            DialogueLine line = currentDialogueLines[currentDialogueIndex];
+
+            dialogueText.text = line.text;
+
+            if (line.speakerSprite != null)
+            {
+                dialogueCharacterImage.sprite = line.speakerSprite;
+                dialogueCharacterImage.gameObject.SetActive(true);
+            }
+            else
+            {
+                dialogueCharacterImage.gameObject.SetActive(false);
+            }
         }
 
         private void AdvanceDialogue()
         {
             currentDialogueIndex++;
-
-            if (currentDialogueIndex < currentDialogueLines.Length)
-            {
-                dialogueText.text = currentDialogueLines[currentDialogueIndex];
-            }
-            else
-            {
-                EndDialogue();
-            }
+            ShowCurrentDialogue();
         }
+
         private void EndDialogue()
         {
-            dialoguePanel.SetActive(false);
+            dialogueContainer.SetActive(false);
             currentDialogueLines = null;
 
             var callback = onDialogueEnd;
@@ -174,12 +177,6 @@ namespace Aquarium
         #endregion
 
         #region DayEnd
-        /*public void ShowDayEnd()
-        {
-            SetState(UIState.DayEnd);
-            SetGoal("End Week");
-            dayEndPanel.SetActive(true);
-        }*/
         public void ShowDayEnd()
         {
             SetGoal("End Week");

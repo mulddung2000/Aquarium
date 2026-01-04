@@ -1,5 +1,7 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
+using System.IO;
 
 namespace Aquarium
 {
@@ -18,18 +20,34 @@ namespace Aquarium
         [SerializeField] private TextMeshProUGUI goalText;
         [SerializeField] private TextMeshProUGUI dateText;
 
+        [Header("Remove Button")]
+        [SerializeField] private Button removeDataButton;
+
+        private void Awake()
+        {
+            // RemoveData 버튼 자동 연결 (Inspector 미지정 시)
+            if (removeDataButton == null)
+            {
+                Transform t = transform.Find("RemoveData");
+                if (t != null)
+                    removeDataButton = t.GetComponent<Button>();
+            }
+
+            if (removeDataButton != null)
+            {
+                removeDataButton.onClick.AddListener(RemoveSaveData);
+            }
+        }
+
         private void Start()
         {
-            Debug.Log($"[SaveSlotUI] Start Slot {slotIndex}");
             Refresh();
         }
 
         public void Refresh()
         {
-            Debug.Log($"[SaveSlotUI] Refresh Slot {slotIndex}");
             if (SaveManager.Instance == null)
             {
-                Debug.LogError("[SaveSlotUI] SaveManager not found.");
                 ShowEmpty();
                 return;
             }
@@ -51,25 +69,70 @@ namespace Aquarium
             emptyRoot.SetActive(false);
 
             weekText.text = $"Week {data.currentWeek}";
-            locationText.text = ConvertSceneName(data.sceneName);
+            locationText.text = ConvertLocationIDToKorean(data.locationID);
             goalText.text = string.IsNullOrEmpty(data.goalText) ? "-" : data.goalText;
             dateText.text = data.saveDateTime;
+
+            if (removeDataButton != null)
+                removeDataButton.gameObject.SetActive(true);
         }
 
         private void ShowEmpty()
         {
             filledRoot.SetActive(false);
             emptyRoot.SetActive(true);
+
+            if (removeDataButton != null)
+                removeDataButton.gameObject.SetActive(false);
         }
 
-        private string ConvertSceneName(string sceneName)
+        private void RemoveSaveData()
         {
-            // UI 표시용 변환 (나중에 LocationID 기반으로 교체 가능)
-            switch (sceneName)
+            if (SaveManager.Instance == null)
+                return;
+
+            string path = GetSlotPath(slotIndex);
+
+            if (File.Exists(path))
             {
-                case "Week01Scene": return "Bedroom";
-                case "SchoolScene": return "School";
-                default: return sceneName;
+                File.Delete(path);
+                Debug.Log($"[SaveSlotUI] Slot {slotIndex} save data removed.");
+            }
+
+            Refresh();
+        }
+
+        private string GetSlotPath(int index)
+        {
+            string dir = Path.Combine(Application.persistentDataPath, "saves");
+            return Path.Combine(dir, $"slot_{index}.json");
+        }
+        /// <summary>
+        /// LocationID를 한글 장소명으로 변환한다
+        /// 규칙:
+        /// - LocationID는 "W01_Room" 같은 형식
+        /// - 마지막 '_' 뒤 토큰을 장소 코드로 사용
+        /// </summary>
+
+        private string ConvertLocationIDToKorean(string locationID)
+        {
+            if (string.IsNullOrEmpty(locationID))
+                return "-";
+            // W01_Room -> Room
+            string[] tokens = locationID.Split('_');
+            string placeCode = tokens[tokens.Length - 1];
+
+            switch (placeCode)
+            {
+                case "Room":
+                    return "방";
+                case "School":
+                    return "학교";
+                case "BRoom":
+                    return "발레 연습실";
+                default:
+                    // 정의되지 않은 장소는 그대로 노출 (디버그 목적)
+                    return placeCode;
             }
         }
     }

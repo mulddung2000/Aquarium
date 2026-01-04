@@ -155,6 +155,38 @@ RectTransform:
   m_AnchoredPosition: {x: 150, y: -200}
   m_SizeDelta: {x: 300, y: 400}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &94332245
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 94332246}
+  m_Layer: 0
+  m_Name: Camera_School
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &94332246
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 94332245}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -26.63802, y: 23.71891, z: 18.856743}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1957890458}
+  m_Father: {fileID: 1363728191}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &123252544
 GameObject:
   m_ObjectHideFlags: 0
@@ -214,8 +246,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: I Wish You A Merry Christmas
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 811e2678459dbba48b8ef280675fd26b, type: 2}
+  m_sharedMaterial: {fileID: 866346029589882898, guid: 811e2678459dbba48b8ef280675fd26b, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -280,7 +312,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &123252547
@@ -331,8 +363,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Interaction
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 811e2678459dbba48b8ef280675fd26b, type: 2}
+  m_sharedMaterial: {fileID: 866346029589882898, guid: 811e2678459dbba48b8ef280675fd26b, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -397,7 +429,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &125207193
@@ -657,6 +689,7 @@ MonoBehaviour:
   interactionRadius: 1.2
   nextInteraction: {fileID: 2009264844}
   interactionID: W01_Room_Door_01
+  locationID: W01_Room
 --- !u!1 &597517596
 GameObject:
   m_ObjectHideFlags: 0
@@ -914,14 +947,53 @@ MonoBehaviour:
   interactionName: Fish Tank
   goalText: Check Fish Tank
   dialogueLines:
-  - Feed Fish
-  - Fish Eating
+  - speakerSprite: {fileID: 21300000, guid: b4c5ec8d58b892845a59f28d98e7063b, type: 3}
+    text: "\uC548\uB155?"
+  - speakerSprite: {fileID: 21300000, guid: 45ce9a2ce25e3c249a9f3e008d663ee3, type: 3}
+    text: "\uD558\uD558\uD558!"
+  - speakerSprite: {fileID: 21300000, guid: 76d7c6874d7dfaa4bbbaca21623fbe45, type: 3}
+    text: "\uBB50\uB77C\uB294 \uAC70\uC57C?"
+  - speakerSprite: {fileID: 21300000, guid: 8adfb19e7e4ec734e83f7bb64ec00c4d, type: 3}
+    text: "\uB9D0\uC774 \uB108\uBB34 \uC2EC\uD558\uC796\uC544!"
   isDoor: 0
   targetSpawnPoint: {fileID: 0}
   interactionPoint: {fileID: 597517597}
   interactionRadius: 1.2
   nextInteraction: {fileID: 1799927691}
   interactionID: W01_ROOM_FISHTANK_01
+  locationID: W01_Room
+--- !u!1 &695131666
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 695131667}
+  m_Layer: 0
+  m_Name: Camera_BRoom
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &695131667
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 695131666}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -62.822193, y: -4.8010902, z: 38.027943}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1589783760}
+  m_Father: {fileID: 1363728191}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &752001849
 GameObject:
   m_ObjectHideFlags: 0
@@ -1030,14 +1102,17 @@ MonoBehaviour:
   interactionName: BRoomNPC
   goalText: Talk To NPC
   dialogueLines:
-  - Hello
-  - Bye
+  - speakerSprite: {fileID: 0}
+    text: 
+  - speakerSprite: {fileID: 0}
+    text: 
   isDoor: 0
   targetSpawnPoint: {fileID: 0}
   interactionPoint: {fileID: 1117882966}
   interactionRadius: 1.2
   nextInteraction: {fileID: 881150836}
   interactionID: W01_BRoom_BRoomNPC_01
+  locationID: W01_BRoom
 --- !u!1 &840041151
 GameObject:
   m_ObjectHideFlags: 0
@@ -1155,6 +1230,7 @@ MonoBehaviour:
   interactionRadius: 1.2
   nextInteraction: {fileID: 1320180552}
   interactionID: W01_BRoom_Door_01
+  locationID: W01_BRoom
 --- !u!65 &881150839
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1245,14 +1321,17 @@ MonoBehaviour:
   interactionName: Fish Tank
   goalText: Check Fish Tank Again
   dialogueLines:
-  - Playing With Fish
-  - Fish Happy
+  - speakerSprite: {fileID: 0}
+    text: 
+  - speakerSprite: {fileID: 0}
+    text: 
   isDoor: 0
   targetSpawnPoint: {fileID: 0}
   interactionPoint: {fileID: 597517597}
   interactionRadius: 1.2
   nextInteraction: {fileID: 587034051}
   interactionID: W01_ROOM_FISHTANK_02
+  locationID: W01_Room
 --- !u!1 &888311509
 GameObject:
   m_ObjectHideFlags: 0
@@ -1307,14 +1386,17 @@ MonoBehaviour:
   interactionName: Fish Tank
   goalText: Say Bye To Fish
   dialogueLines:
-  - Bye Fish
-  - Good Night
+  - speakerSprite: {fileID: 0}
+    text: 
+  - speakerSprite: {fileID: 0}
+    text: 
   isDoor: 0
   targetSpawnPoint: {fileID: 0}
   interactionPoint: {fileID: 597517597}
   interactionRadius: 1.2
   nextInteraction: {fileID: 0}
   interactionID: W01_ROOM_FISHTANK_03
+  locationID: W01_Room
 --- !u!4 &888311512
 Transform:
   m_ObjectHideFlags: 0
@@ -1659,8 +1741,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1140239567}
+  - component: {fileID: 1140239568}
   m_Layer: 0
-  m_Name: GameManager
+  m_Name: CameraManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1681,6 +1764,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 752001850}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1140239568
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1140239566}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d51e1ae6d1900af488e098dbdac6aaa4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1140652920
 GameObject:
   m_ObjectHideFlags: 0
@@ -1758,7 +1853,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1222697228}
   - component: {fileID: 1222697227}
-  - component: {fileID: 1222697229}
   m_Layer: 0
   m_Name: CinemachineCamera
   m_TagString: Untagged
@@ -1818,43 +1912,12 @@ Transform:
   m_GameObject: {fileID: 1222697225}
   serializedVersion: 2
   m_LocalRotation: {x: 0.23911765, y: 0.3696438, z: -0.09904577, w: 0.89239913}
-  m_LocalPosition: {x: -21.666286, y: 31.48109, z: -19.006287}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1249154430}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1222697229
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1222697225}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 886251e9a18ece04ea8e61686c173e1b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CameraDistance: 10
-  DeadZoneDepth: 0
-  Composition:
-    ScreenPosition: {x: 0, y: 0.35}
-    DeadZone:
-      Enabled: 1
-      Size: {x: 0, y: 0}
-    HardLimits:
-      Enabled: 0
-      Size: {x: 0.8, y: 0.8}
-      Offset: {x: 0, y: 0}
-  CenterOnActivate: 1
-  TargetOffset: {x: 0, y: 0, z: 0}
-  Damping: {x: 1, y: 1, z: 1}
-  Lookahead:
-    Enabled: 0
-    Time: 0
-    Smoothing: 0
-    IgnoreY: 0
 --- !u!1 &1244615810
 GameObject:
   m_ObjectHideFlags: 0
@@ -1872,7 +1935,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1244615811
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1886,7 +1949,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1334709269}
-  - {fileID: 1398901313}
   m_Father: {fileID: 1756414063}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -1932,6 +1994,38 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1244615810}
   m_CullTransparentMesh: 1
+--- !u!1 &1249154429
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1249154430}
+  m_Layer: 0
+  m_Name: Camera_Room
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &1249154430
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1249154429}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1222697228}
+  m_Father: {fileID: 1363728191}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1273808156
 GameObject:
   m_ObjectHideFlags: 0
@@ -2086,7 +2180,8 @@ MonoBehaviour:
   goalText: {fileID: 2115441937}
   hoverPanel: {fileID: 1381195328}
   hoverText: {fileID: 125207192}
-  dialoguePanel: {fileID: 1244615810}
+  dialogueContainer: {fileID: 1756414062}
+  dialogueCharacterImage: {fileID: 1398901314}
   dialogueText: {fileID: 123252546}
   dayEndPanel: {fileID: 1067953043}
 --- !u!4 &1283846459
@@ -2158,6 +2253,7 @@ MonoBehaviour:
   interactionRadius: 1.2
   nextInteraction: {fileID: 888311509}
   interactionID: W01_School_Door_02
+  locationID: W01_School
 --- !u!65 &1302239301
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2250,14 +2346,17 @@ MonoBehaviour:
   interactionName: SchoolNPC
   goalText: Talk To NPC
   dialogueLines:
-  - Hello Again
-  - Bye Bye
+  - speakerSprite: {fileID: 0}
+    text: 
+  - speakerSprite: {fileID: 0}
+    text: 
   isDoor: 0
   targetSpawnPoint: {fileID: 0}
   interactionPoint: {fileID: 1029698991}
   interactionRadius: 1.2
   nextInteraction: {fileID: 1302239298}
   interactionID: W01_School_SchoolNPC_02
+  locationID: W01_School
 --- !u!1 &1329500707
 GameObject:
   m_ObjectHideFlags: 0
@@ -2312,6 +2411,7 @@ MonoBehaviour:
   interactionRadius: 1.2
   nextInteraction: {fileID: 808746065}
   interactionID: W01_School_Door_01
+  locationID: W01_School
 --- !u!65 &1329500710
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2409,6 +2509,40 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1334709268}
   m_CullTransparentMesh: 1
+--- !u!1 &1363728190
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1363728191}
+  m_Layer: 0
+  m_Name: Cameras
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1363728191
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1363728190}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -21.666286, y: 31.48109, z: -19.006287}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1249154430}
+  - {fileID: 94332246}
+  - {fileID: 695131667}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1375649155
 GameObject:
   m_ObjectHideFlags: 0
@@ -2587,17 +2721,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1398901312}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1244615811}
+  m_Father: {fileID: 1756414063}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -425, y: -125}
-  m_SizeDelta: {x: -910, y: -350}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 125, y: 180}
+  m_SizeDelta: {x: 256, y: 256}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1398901314
 MonoBehaviour:
@@ -2612,15 +2746,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: b4c5ec8d58b892845a59f28d98e7063b, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -2768,8 +2902,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: End Week
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 811e2678459dbba48b8ef280675fd26b, type: 2}
+  m_sharedMaterial: {fileID: 866346029589882898, guid: 811e2678459dbba48b8ef280675fd26b, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2834,7 +2968,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1576283466
@@ -2845,6 +2979,81 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1576283463}
   m_CullTransparentMesh: 1
+--- !u!1 &1589783759
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1589783760}
+  - component: {fileID: 1589783761}
+  m_Layer: 0
+  m_Name: CinemachineCamera
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1589783760
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1589783759}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.23911765, y: 0.3696438, z: -0.09904577, w: 0.89239913}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 695131667}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1589783761
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1589783759}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9dfa5b682dcd46bda6128250e975f58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Priority:
+    Enabled: 0
+    m_Value: 0
+  OutputChannel: 1
+  StandbyUpdate: 2
+  m_StreamingVersion: 20241001
+  m_LegacyPriority: 0
+  Target:
+    TrackingTarget: {fileID: 1474276420}
+    LookAtTarget: {fileID: 0}
+    CustomLookAtTarget: 0
+  Lens:
+    FieldOfView: 60
+    OrthographicSize: 5
+    NearClipPlane: 0.3
+    FarClipPlane: 1000
+    Dutch: 0
+    ModeOverride: 0
+    PhysicalProperties:
+      GateFit: 2
+      SensorSize: {x: 21.946, y: 16.002}
+      LensShift: {x: 0, y: 0}
+      FocusDistance: 10
+      Iso: 200
+      ShutterSpeed: 0.005
+      Aperture: 16
+      BladeCount: 5
+      Curvature: {x: 2, y: 11}
+      BarrelClipping: 0.25
+      Anamorphism: 0
+  BlendHint: 0
 --- !u!1 &1590051771
 GameObject:
   m_ObjectHideFlags: 0
@@ -3044,7 +3253,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1756414063
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3058,6 +3267,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1244615811}
+  - {fileID: 1398901313}
   m_Father: {fileID: 1605835889}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -3172,14 +3382,17 @@ MonoBehaviour:
   interactionName: Mirror
   goalText: Check Mirror
   dialogueLines:
-  - Looking Into Mirror
-  - I Look Good
+  - speakerSprite: {fileID: 0}
+    text: 
+  - speakerSprite: {fileID: 0}
+    text: 
   isDoor: 0
   targetSpawnPoint: {fileID: 0}
   interactionPoint: {fileID: 1119269206}
   interactionRadius: 1.2
   nextInteraction: {fileID: 883684885}
   interactionID: W01_ROOM_Mirror_01
+  locationID: W01_Room
 --- !u!1 &1858792298
 GameObject:
   m_ObjectHideFlags: 0
@@ -3301,6 +3514,81 @@ Light:
   m_LightUnit: 1
   m_LuxAtDistance: 1
   m_EnableSpotReflector: 1
+--- !u!1 &1957890457
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1957890458}
+  - component: {fileID: 1957890459}
+  m_Layer: 0
+  m_Name: CinemachineCamera
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1957890458
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1957890457}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.23911765, y: 0.3696438, z: -0.09904577, w: 0.89239913}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 94332246}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1957890459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1957890457}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9dfa5b682dcd46bda6128250e975f58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Priority:
+    Enabled: 0
+    m_Value: 0
+  OutputChannel: 1
+  StandbyUpdate: 2
+  m_StreamingVersion: 20241001
+  m_LegacyPriority: 0
+  Target:
+    TrackingTarget: {fileID: 1474276420}
+    LookAtTarget: {fileID: 0}
+    CustomLookAtTarget: 0
+  Lens:
+    FieldOfView: 60
+    OrthographicSize: 5
+    NearClipPlane: 0.3
+    FarClipPlane: 1000
+    Dutch: 0
+    ModeOverride: 0
+    PhysicalProperties:
+      GateFit: 2
+      SensorSize: {x: 21.946, y: 16.002}
+      LensShift: {x: 0, y: 0}
+      FocusDistance: 10
+      Iso: 200
+      ShutterSpeed: 0.005
+      Aperture: 16
+      BladeCount: 5
+      Curvature: {x: 2, y: 11}
+      BarrelClipping: 0.25
+      Anamorphism: 0
+  BlendHint: 0
 --- !u!1 &2009264844
 GameObject:
   m_ObjectHideFlags: 0
@@ -3372,14 +3660,17 @@ MonoBehaviour:
   interactionName: SchoolNPC
   goalText: Talk to NPC
   dialogueLines:
-  - Hello
-  - Bye
+  - speakerSprite: {fileID: 0}
+    text: 
+  - speakerSprite: {fileID: 0}
+    text: 
   isDoor: 0
   targetSpawnPoint: {fileID: 0}
   interactionPoint: {fileID: 1029698991}
   interactionRadius: 1.2
   nextInteraction: {fileID: 1329500707}
   interactionID: W01_School_SchoolNPC_01
+  locationID: W01_School
 --- !u!1 &2103419497
 GameObject:
   m_ObjectHideFlags: 0
@@ -3470,8 +3761,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: List of Things to do
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 811e2678459dbba48b8ef280675fd26b, type: 2}
+  m_sharedMaterial: {fileID: 866346029589882898, guid: 811e2678459dbba48b8ef280675fd26b, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3536,7 +3827,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &2115441938
@@ -25215,15 +25506,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2778472075761875171, guid: f3326c1ae593c1749b9aea7356688e8d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -21.666286
+      value: -48.304306
       objectReference: {fileID: 0}
     - target: {fileID: 2778472075761875171, guid: f3326c1ae593c1749b9aea7356688e8d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 31.48109
+      value: 55.2
       objectReference: {fileID: 0}
     - target: {fileID: 2778472075761875171, guid: f3326c1ae593c1749b9aea7356688e8d, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -19.006287
+      value: -0.14954376
       objectReference: {fileID: 0}
     - target: {fileID: 2778472075761875171, guid: f3326c1ae593c1749b9aea7356688e8d, type: 3}
       propertyPath: m_LocalRotation.w
@@ -30194,4 +30485,4 @@ SceneRoots:
   - {fileID: 1140652921}
   - {fileID: 173748713}
   - {fileID: 2684237327390476321}
-  - {fileID: 1222697228}
+  - {fileID: 1363728191}

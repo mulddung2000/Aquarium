@@ -10,7 +10,7 @@ namespace Aquarium
         [SerializeField] private string goalText;
 
         [Header("Dialogue")]
-        [SerializeField] private string[] dialogueLines;
+        [SerializeField] private DialogueLine[] dialogueLines;
 
         [Header("Door (Teleport)")]
         [SerializeField] private bool isDoor;
@@ -25,18 +25,29 @@ namespace Aquarium
 
         [Header("Interaction ID (Save/Load)")]
         [SerializeField] private string interactionID;
+
+        [Header("Location ID")]
+        [Tooltip("이 Interaction이 속한 장소 ID")]
+        [SerializeField] private string locationID;
         #endregion
 
         #region Properties
         public Transform InteractionPoint => interactionPoint;
         public float InteractionRadius => interactionRadius;
         public string InteractionID => interactionID;
+        public string LocationID => locationID;
         #endregion
 
         #region Unity Events
         private void OnEnable()
         {
-            // 🔹 이 Interaction이 "현재 목표"일 때만 Goal 갱신
+            // 현재 Interaction 활성화 시 Location 확정
+            if (!string.IsNullOrEmpty(locationID))
+            {
+                InteractionRegistry.SetCurrentLocation(locationID);
+            }
+
+            // 현재 목표 갱신
             if (!string.IsNullOrEmpty(goalText) && UIManager.Instance != null)
             {
                 UIManager.Instance.SetGoal(goalText);
@@ -99,15 +110,12 @@ namespace Aquarium
 
         private void FinishInteraction()
         {
-            // 🔹 UI 정리
             UIManager.Instance.SetState(UIState.None);
 
-            // 🔹 다음 Interaction 처리
             if (nextInteraction != null)
             {
                 nextInteraction.SetActive(true);
 
-                // ✅ 저장 기준 Interaction ID는 "다음 Interaction"
                 var nextIO = nextInteraction.GetComponent<InteractiveObject>();
                 if (nextIO != null)
                 {
@@ -116,15 +124,12 @@ namespace Aquarium
             }
             else
             {
-                // 다음 Interaction이 없으면 DayEnd
                 UIManager.Instance.ShowDayEnd();
                 return;
             }
 
-            // 🔹 현재 Interaction 비활성화
             gameObject.SetActive(false);
 
-            // 🔹 저장 (Interaction 완료 시점)
             if (SaveManager.Instance != null)
             {
                 SaveManager.Instance.SaveGame();
@@ -135,7 +140,8 @@ namespace Aquarium
 #if UNITY_EDITOR
         private void OnDrawGizmosSelected()
         {
-            if (interactionPoint == null) return;
+            if (interactionPoint == null)
+                return;
 
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(interactionPoint.position, interactionRadius);
