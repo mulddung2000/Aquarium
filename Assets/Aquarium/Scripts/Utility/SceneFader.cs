@@ -1,122 +1,207 @@
+/*using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
-using UnityEngine.SceneManagement;
 
 namespace Aquarium
 {
-    /// <summary>
-    /// 씬 페이드인, 페이드 아웃 기능
-    /// 페이드 아웃 후 씬 이동
-    /// </summary>
     public class SceneFader : MonoBehaviour
     {
-        #region Variables
-        public Image img;
-        public AnimationCurve curve; 
-        #endregion
+        public static SceneFader Instance;
 
-        #region Unity Event Method
-        private void Start()
+        [SerializeField] private CanvasGroup canvasGroup;
+        [SerializeField] private float fadeDuration = 0.6f;
+
+        private void Awake()
         {
-            // 페이더 이미지를 검정색으로 시작
-            img.color = new Color(0f, 0f, 0f, 1f);
-        }
-        #endregion
-
-        #region Custom Method
-
-        // 페이드인 시작
-        public void FadeStart(float delayTime = 0f)
-        {
-            StartCoroutine(FadeIn(delayTime));
+            if (Instance == null)
+                Instance = this;
+            else
+                Destroy(gameObject);
         }
 
-        // 페이드인 : 1초동안 이미지 a: 1 -> 0
-        public IEnumerator FadeIn(float delayTime = 0f)
+        public void FadeOut(Action onComplete = null)
         {
-            if (delayTime > 0f)
+            StartCoroutine(FadeRoutine(1f, onComplete));
+        }
+
+        public void FadeIn(Action onComplete = null)
+        {
+            StartCoroutine(FadeRoutine(0f, onComplete));
+        }
+
+        private IEnumerator FadeRoutine(float targetAlpha, Action onComplete)
+        {
+            float startAlpha = canvasGroup.alpha;
+            float time = 0f;
+
+            while (time < fadeDuration)
             {
-                yield return new WaitForSeconds(delayTime);
+                time += Time.deltaTime;
+                canvasGroup.alpha = Mathf.Lerp(startAlpha, targetAlpha, time / fadeDuration);
+                yield return null;
             }
 
-            float t = 1f;
+            canvasGroup.alpha = targetAlpha;
+            onComplete?.Invoke();
+        }
+    }
+}
+*/
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using System.Collections;
 
+namespace Aquarium
+{
+    public class SceneFader : MonoBehaviour
+    {
+        public static SceneFader Instance;
+
+        [Header("Fade")]
+        [SerializeField] private Image img;
+        [SerializeField] private AnimationCurve curve;
+        [SerializeField] private float fadeDuration = 1f;
+
+        private bool isFading;
+
+        private void Awake()
+        {
+            if (Instance != null)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            Instance = this;
+
+            // 🔑 핵심: 루트로 올림
+            transform.SetParent(null);
+
+            DontDestroyOnLoad(gameObject);
+
+            SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+
+
+        private void OnDestroy()
+        {
+            if (Instance == this)
+                SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
+
+        private void Start()
+        {
+            // 항상 검정에서 시작
+            SetAlpha(1f);
+        }
+
+        /* =========================================================
+         * Scene Load Flow
+         * ========================================================= */
+
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            // 씬 로드 직후 카메라부터 강제 세팅
+            if (CameraManager.Instance != null)
+            {
+                string location = InteractionRegistry.GetCurrentLocation();
+                if (!string.IsNullOrEmpty(location))
+                    CameraManager.Instance.ForceSetLocation(location);
+            }
+
+            // 그 다음 FadeIn
+            StartCoroutine(FadeIn());
+        }
+
+        public void FadeToScene(string sceneName)
+        {
+            if (isFading) return;
+            StartCoroutine(FadeOutAndLoad(sceneName));
+        }
+
+        private IEnumerator FadeOutAndLoad(string sceneName)
+        {
+            isFading = true;
+            yield return FadeOut();
+            SceneManager.LoadScene(sceneName);
+            isFading = false;
+        }
+
+        /* =========================================================
+         * Teleport Flow
+         * ========================================================= */
+
+        public void FadeTeleport(
+            Transform player,
+            Transform targetPos,
+            System.Action onComplete = null
+        )
+        {
+            if (isFading) return;
+            StartCoroutine(FadeTeleportRoutine(player, targetPos, onComplete));
+        }
+
+        private IEnumerator FadeTeleportRoutine(
+            Transform player,
+            Transform target,
+            System.Action onComplete
+        )
+        {
+            isFading = true;
+
+            yield return FadeOut();
+
+            // 위치 이동
+            player.position = target.position;
+
+            // 카메라 재세팅
+            if (CameraManager.Instance != null)
+            {
+                string location = InteractionRegistry.GetCurrentLocation();
+                if (!string.IsNullOrEmpty(location))
+                    CameraManager.Instance.ForceSetLocation(location);
+            }
+
+            yield return FadeIn();
+
+            isFading = false;
+            onComplete?.Invoke();
+        }
+
+        /* =========================================================
+         * Fade Core
+         * ========================================================= */
+
+        private IEnumerator FadeIn()
+        {
+            float t = fadeDuration;
             while (t > 0f)
             {
                 t -= Time.deltaTime;
-                float a = curve.Evaluate(t);
-                img.color = new Color(0f, 0f, 0f, a);
+                SetAlpha(curve.Evaluate(t / fadeDuration));
                 yield return null;
             }
+            SetAlpha(0f);
         }
 
-        // 외부 호출용 (string)
-        public void FadeTo(string sceneName)
-        {
-            StartCoroutine(FadeOut(sceneName));
-        }
-
-        // 외부 호출용 (build index)
-        public void FadeTo(int buildIndex)
-        {
-            StartCoroutine(FadeOut(buildIndex));
-        }
-
-        // 페이드 아웃 : 1초동안 이미지 a: 0 -> 1
-        public IEnumerator FadeOut(string sceneName)
+        private IEnumerator FadeOut()
         {
             float t = 0f;
-
-            while (t < 1f)
+            while (t < fadeDuration)
             {
                 t += Time.deltaTime;
-                float a = curve.Evaluate(t);
-                img.color = new Color(0f, 0f, 0f, a);
+                SetAlpha(curve.Evaluate(t / fadeDuration));
                 yield return null;
             }
-
-            // ✅ 페이드 아웃 완료 후
-            // 씬 이름이 있을 때만 씬 이동
-            if (!string.IsNullOrEmpty(sceneName))
-            {
-                SceneManager.LoadScene(sceneName);
-            }
+            SetAlpha(1f);
         }
 
-        // 페이드 아웃 (build index)
-        IEnumerator FadeOut(int buildIndex)
+        private void SetAlpha(float a)
         {
-            float t = 0f;
-
-            while (t < 1f)
-            {
-                t += Time.deltaTime;
-                float a = curve.Evaluate(t);
-                img.color = new Color(0f, 0f, 0f, a);
-                yield return null;
-            }
-
-            if (buildIndex >= 0)
-            {
-                SceneManager.LoadScene(buildIndex);
-            }
+            if (img == null) return;
+            img.color = new Color(0f, 0f, 0f, a);
         }
-
-        // 씬 이동 없는 순수 페이드 아웃
-        public IEnumerator FadeOutOnly()
-        {
-            float t = 0f;
-
-            while (t < 1f)
-            {
-                t += Time.deltaTime;
-                float a = curve.Evaluate(t);
-                img.color = new Color(0f, 0f, 0f, a);
-                yield return null;
-            }
-        }
-
-        #endregion
     }
 }

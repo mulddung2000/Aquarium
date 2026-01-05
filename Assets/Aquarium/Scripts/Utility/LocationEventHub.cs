@@ -1,15 +1,16 @@
 using System;
+using UnityEngine;
 
 namespace Aquarium
 {
     public static class LocationEventHub
     {
-        // LocationID°¡ º¯°æµÇ¾úÀ» ¶§ ¹ß»ıÇÏ´Â ÀÌº¥Æ®
-        // ¿¹: "W01_Room"
+        // LocationIDê°€ ë³€ê²½ë˜ì—ˆì„ ë•Œ ë°œìƒí•˜ëŠ” ì´ë²¤íŠ¸
+        // ì˜ˆ: "W01_Room"
         public static event Action<string> OnLocationChanged;
 
-        // Location º¯°æ ¾Ë¸²
-        public static void RaiseLocationChanged(string locationID)
+        // Location ë³€ê²½ ì•Œë¦¼
+        public static void SetLocation(string locationID)
         {
             if (string.IsNullOrEmpty(locationID))
                 return;

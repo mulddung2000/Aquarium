@@ -1,6 +1,39 @@
+/*using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+
+namespace Aquarium
+{
+    public class SaveSlotButton : MonoBehaviour
+    {
+        [SerializeField] private string targetSceneName = "Week01";
+
+        private Button button;
+
+        private void Awake()
+        {
+            button = GetComponent<Button>();
+            button.onClick.AddListener(OnClick);
+        }
+
+        private void OnClick()
+        {
+            if (SceneFader.Instance == null)
+            {
+                SceneManager.LoadScene(targetSceneName);
+                return;
+            }
+
+            SceneFader.Instance.FadeOut(() =>
+            {
+                SceneManager.LoadScene(targetSceneName);
+            });
+        }
+    }
+}
+*/
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 namespace Aquarium
 {
@@ -14,17 +47,11 @@ namespace Aquarium
         [SerializeField] private string newGameSceneName = "Week01";
 
         private Button button;
-        private SceneFader sceneFader;
 
         private void Awake()
         {
             button = GetComponent<Button>();
             button.onClick.AddListener(OnClickSlot);
-
-            sceneFader = Object.FindFirstObjectByType<SceneFader>();
-
-            if (sceneFader == null)
-                Debug.LogError("[SaveSlotButton] SceneFader not found.");
         }
 
         private void OnClickSlot()
@@ -38,24 +65,14 @@ namespace Aquarium
 
                 Debug.Log($"[SaveSlotButton] Load → {data.sceneName}");
 
-                StartCoroutine(LoadSceneWithFade(data.sceneName));
+                SceneFader.Instance.FadeToScene(data.sceneName);
             }
             else
             {
                 Debug.Log("[SaveSlotButton] New Game Start");
 
-                StartCoroutine(LoadSceneWithFade(newGameSceneName));
+                SceneFader.Instance.FadeToScene(newGameSceneName);
             }
-        }
-
-        private System.Collections.IEnumerator LoadSceneWithFade(string sceneName)
-        {
-            if (sceneFader != null)
-                sceneFader.FadeStart();
-
-            yield return new WaitForSeconds(1f); // SceneFader 페이드 시간과 동일해야 함
-
-            SceneManager.LoadScene(sceneName);
         }
     }
 }

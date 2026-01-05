@@ -1,5 +1,5 @@
-using UnityEngine;
 using System.Collections;
+using UnityEngine;
 
 namespace Aquarium
 {
@@ -16,52 +16,32 @@ namespace Aquarium
 
         private void Start()
         {
-            // Load 중이면 초기화 금지
-            if (SaveManager.Instance != null && SaveManager.Instance.HasPendingLoad())
-            {
-                StartCoroutine(SceneStartFlow());
-                return;
-            }
-
-            // New Game 초기화
-            if (firstInteraction != null)
-                firstInteraction.SetActive(false);
-
+            Debug.Log("[WeekManager] Scene Start");
             StartCoroutine(SceneStartFlow());
         }
 
         private IEnumerator SceneStartFlow()
         {
-            // Fade In
-            if (sceneFader != null)
-                sceneFader.FadeStart();
+            // ❌ sceneFader.FadeStart(); 제거
 
-            yield return new WaitForSeconds(1f);
+            yield return null;
 
-            // Load 우선 처리
             if (SaveManager.Instance != null && SaveManager.Instance.HasPendingLoad())
             {
                 ApplyLoadedData(SaveManager.Instance.ConsumeLoadData());
                 yield break;
             }
 
-            // New Game Start
             if (firstInteraction != null)
                 firstInteraction.SetActive(true);
+
+            DeclareInitialLocation();
         }
 
         private void ApplyLoadedData(SaveData data)
         {
-            // Week 복구
             currentWeek = data.currentWeek;
 
-            // Location 복구
-            if (!string.IsNullOrEmpty(data.locationID))
-            {
-                InteractionRegistry.SetCurrentLocation(data.locationID);
-            }
-
-            // Player 위치 복구
             GameObject player = GameObject.FindWithTag("Player");
             if (player != null)
             {
@@ -72,34 +52,40 @@ namespace Aquarium
                     player.transform.position = data.playerPosition;
             }
 
-            // Interaction 복구 (비활성 포함)
-            var interactions =
-                Object.FindObjectsByType<InteractiveObject>(
-                    FindObjectsInactive.Include,
-                    FindObjectsSortMode.None
-                );
+            // Interaction 복원
+            var interactions = Object.FindObjectsByType<InteractiveObject>(
+                FindObjectsInactive.Include,
+                FindObjectsSortMode.None
+            );
 
             foreach (var io in interactions)
-            {
-                bool active = io.InteractionID == data.nextInteractionID;
-                io.gameObject.SetActive(active);
-            }
+                io.gameObject.SetActive(io.InteractionID == data.nextInteractionID);
 
-            // Interaction Registry 복구
             InteractionRegistry.SetCurrentInteraction(data.nextInteractionID);
 
-            // Goal 복구
             if (!string.IsNullOrEmpty(data.goalText))
                 UIManager.Instance.SetGoal(data.goalText);
+
+            DeclareInitialLocation();
 
             UIManager.Instance.SetState(UIState.None);
         }
 
-        #region Save API
-        public int GetCurrentWeek()
+        public void DeclareInitialLocation()
         {
-            return currentWeek;
+            string initialLocationID = InteractionRegistry.GetCurrentLocation();
+            if (string.IsNullOrEmpty(initialLocationID))
+            {
+                initialLocationID = $"W{currentWeek:D2}_Room";
+                InteractionRegistry.SetCurrentLocation(initialLocationID);
+            }
+
+            LocationEventHub.SetLocation(initialLocationID);
+
+            if (CameraManager.Instance != null)
+                CameraManager.Instance.ForceSetLocation(initialLocationID);
         }
-        #endregion
+
+        public int GetCurrentWeek() => currentWeek;
     }
 }

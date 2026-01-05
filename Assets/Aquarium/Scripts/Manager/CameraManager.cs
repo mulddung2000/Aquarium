@@ -9,13 +9,14 @@ namespace Aquarium
         public static CameraManager Instance;
 
         // key: Room / School / BRoom
-        private Dictionary<string, GameObject> locationCameras =
-            new Dictionary<string, GameObject>();
+        private Dictionary<string, GameObject> locationCameras = new Dictionary<string, GameObject>();
 
         private void Awake()
         {
             if (Instance == null)
+            {
                 Instance = this;
+            }
             else
             {
                 Destroy(gameObject);
@@ -35,11 +36,11 @@ namespace Aquarium
             LocationEventHub.OnLocationChanged -= OnLocationChanged;
         }
 
-        // Hierarchy ³» ¸ğµç Camera_* Cinemachine Camera ¼öÁı
         private void CacheAllLocationCameras()
         {
             locationCameras.Clear();
 
+            // ìœ ë‹ˆí‹° 6 + Cinemachine 3.1.5 ë°©ì‹
             var cameras = Object.FindObjectsByType<CinemachineCamera>(
                 FindObjectsInactive.Include,
                 FindObjectsSortMode.None
@@ -47,32 +48,25 @@ namespace Aquarium
 
             foreach (var cam in cameras)
             {
-                GameObject camObject = cam.gameObject;
-
-                if (!camObject.name.StartsWith("Camera_"))
+                GameObject camObj = cam.gameObject;
+                if (!camObj.name.StartsWith("Camera_"))
                     continue;
 
-                // Camera_Room -> Room
-                string locationKey = camObject.name.Replace("Camera_", "");
-
+                string locationKey = camObj.name.Replace("Camera_", "");
                 if (!locationCameras.ContainsKey(locationKey))
-                {
-                    locationCameras.Add(locationKey, camObject);
-                }
+                    locationCameras.Add(locationKey, camObj);
 
-                // ±âº»Àº ÀüºÎ ºñÈ°¼º
-                camObject.SetActive(false);
+                // ê¸°ë³¸ì€ ì „ë¶€ ë¹„í™œì„±í™”
+                camObj.SetActive(false);
             }
         }
 
-        // LocationEventHub ÀÌº¥Æ® ¼ö½Å
         private void OnLocationChanged(string locationID)
         {
             string locationKey = ExtractLocationKey(locationID);
             ActivateCamera(locationKey);
         }
 
-        // W01_Room -> Room
         private string ExtractLocationKey(string locationID)
         {
             if (string.IsNullOrEmpty(locationID))
@@ -85,29 +79,24 @@ namespace Aquarium
             return locationID.Substring(underscoreIndex + 1);
         }
 
-        // ÇØ´ç Location Ä«¸Ş¶ó¸¸ È°¼ºÈ­
         private void ActivateCamera(string locationKey)
         {
             if (string.IsNullOrEmpty(locationKey))
                 return;
 
             foreach (var pair in locationCameras)
-            {
                 pair.Value.SetActive(false);
-            }
 
             if (!locationCameras.ContainsKey(locationKey))
             {
-                Debug.LogWarning(
-                    $"CameraManager: Camera_{locationKey} ¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù."
-                );
+                Debug.LogWarning($"CameraManager: Camera_{locationKey} ë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
                 return;
             }
 
             locationCameras[locationKey].SetActive(true);
         }
 
-        // Load Á÷ÈÄ / Fade ÀÌÀü °­Á¦ ¼¼ÆÃ¿ë
+        // Load ì§í›„ / Fade ì´ì „ ê°•ì œ ì„¸íŒ…ìš©
         public void ForceSetLocation(string locationID)
         {
             string locationKey = ExtractLocationKey(locationID);
