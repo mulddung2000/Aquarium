@@ -2134,6 +2134,63 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 182639515}
   m_Mesh: {fileID: 4300000, guid: 0ec0d979a0b58c341bc6aae92a3859e9, type: 3}
+--- !u!1 &233310829
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 233310830}
+  - component: {fileID: 233310831}
+  m_Layer: 0
+  m_Name: CameraManager (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &233310830
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 233310829}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 15.468292, y: -25.503225, z: 13.379078}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 752001850}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &233310831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 233310829}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d51e1ae6d1900af488e098dbdac6aaa4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  activePriority: 20
+  inactivePriority: 0
+  cameras:
+  - locationID: W01_Room
+    camera: {fileID: 1222697227}
+  - locationID: W01_School
+    camera: {fileID: 1957890459}
+  - locationID: W01_BRoom
+    camera: {fileID: 1589783761}
+  - locationID: W01_Kitchen
+    camera: {fileID: 868210525}
+  - locationID: W01_School02
+    camera: {fileID: 868210525}
 --- !u!1 &240545414
 GameObject:
   m_ObjectHideFlags: 0
@@ -4522,6 +4579,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1140239567}
+  - {fileID: 233310830}
   - {fileID: 1699044160}
   - {fileID: 276991846}
   - {fileID: 1283846459}
@@ -6953,7 +7011,7 @@ MonoBehaviour:
   - locationID: W01_Kitchen
     camera: {fileID: 868210525}
   - locationID: W01_School02
-    camera: {fileID: 868210525}
+    camera: {fileID: 889875346}
 --- !u!1 &1140652920
 GameObject:
   m_ObjectHideFlags: 0
@@ -18621,11 +18679,11 @@ MonoBehaviour:
   interactionName: "\uAC8C\uC2DC\uD310"
   goalText: "\uAC8C\uC2DC\uD310\uC744 \uD655\uC778\uD558\uC790"
   dialogueLines:
-  - speakerSprite: {fileID: 0}
+  - speakerSprite: {fileID: 21300000, guid: f4b6aebe6066e004ca693e89179ccb03, type: 3}
     text: dsada
-  - speakerSprite: {fileID: 0}
+  - speakerSprite: {fileID: 21300000, guid: f4b6aebe6066e004ca693e89179ccb03, type: 3}
     text: dsada
-  - speakerSprite: {fileID: 0}
+  - speakerSprite: {fileID: 21300000, guid: f4b6aebe6066e004ca693e89179ccb03, type: 3}
     text: dsada
   isDoor: 0
   targetSpawnPoint: {fileID: 0}
@@ -32786,7 +32844,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &3490576200313720889
 GameObject:
   m_ObjectHideFlags: 0
