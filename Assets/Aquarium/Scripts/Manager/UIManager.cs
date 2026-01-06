@@ -1,7 +1,7 @@
-using System;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using System;
 
 namespace Aquarium
 {
@@ -42,6 +42,9 @@ namespace Aquarium
         private DialogueLine[] currentDialogueLines;
         private int currentDialogueIndex;
         private Action onDialogueEnd;
+
+        // 🔑 현재 Goal 데이터 (UI와 분리)
+        private string currentGoalText = "";
         #endregion
 
         #region Unity
@@ -55,10 +58,10 @@ namespace Aquarium
                 return;
             }
 
-            // 초기 UI 상태
-            hoverPanel.SetActive(false);
             dialogueContainer.SetActive(false);
+            hoverPanel.SetActive(false);
             dayEndPanel.SetActive(false);
+            goalPanel.SetActive(false);
         }
 
         private void Update()
@@ -79,21 +82,47 @@ namespace Aquarium
             dialogueContainer.SetActive(false);
             dayEndPanel.SetActive(false);
 
-            goalPanel.SetActive(newState != UIState.Dialogue);
-
             switch (newState)
             {
                 case UIState.Dialogue:
                     dialogueContainer.SetActive(true);
+                    goalPanel.SetActive(false); // 🔥 Dialogue 중 Goal 숨김
                     break;
 
                 case UIState.DayEnd:
                     dayEndPanel.SetActive(true);
                     break;
 
-                case UIState.Teleport:
-                    // Teleport 시 Hover/Dialogue 끄기
+                default:
+                    RestoreGoal(); // 🔥 일반 상태에서는 Goal 복원
                     break;
+            }
+        }
+        #endregion
+
+        #region Goal
+        public void SetGoal(string text)
+        {
+            currentGoalText = text;
+
+            if (goalText != null)
+                goalText.text = text;
+
+            if (currentState != UIState.Dialogue && !string.IsNullOrEmpty(text))
+                goalPanel.SetActive(true);
+        }
+
+        public string GetCurrentGoalText()
+        {
+            return currentGoalText;
+        }
+
+        public void RestoreGoal()
+        {
+            if (!string.IsNullOrEmpty(currentGoalText))
+            {
+                goalText.text = currentGoalText;
+                goalPanel.SetActive(true);
             }
         }
         #endregion
@@ -117,19 +146,6 @@ namespace Aquarium
         }
         #endregion
 
-        #region Goal
-        public void SetGoal(string text)
-        {
-            goalText.text = text;
-            goalPanel.SetActive(true);
-        }
-
-        public string GetCurrentGoalText()
-        {
-            return goalText != null ? goalText.text : "";
-        }
-        #endregion
-
         #region Dialogue
         public void ShowDialogue(DialogueLine[] lines, Action onEnd)
         {
@@ -141,7 +157,6 @@ namespace Aquarium
             onDialogueEnd = onEnd;
 
             SetState(UIState.Dialogue);
-
             ShowCurrentDialogue();
         }
 
@@ -154,7 +169,6 @@ namespace Aquarium
             }
 
             DialogueLine line = currentDialogueLines[currentDialogueIndex];
-
             dialogueText.text = line.text;
 
             if (line.speakerSprite != null)
@@ -179,9 +193,10 @@ namespace Aquarium
             dialogueContainer.SetActive(false);
             currentDialogueLines = null;
 
+            SetState(UIState.None);
+
             var callback = onDialogueEnd;
             onDialogueEnd = null;
-
             callback?.Invoke();
         }
         #endregion
@@ -193,5 +208,16 @@ namespace Aquarium
             SetState(UIState.DayEnd);
         }
         #endregion
+
+        public void ForceResetState()
+        {
+            currentState = UIState.None;
+
+            hoverPanel.SetActive(false);
+            dialogueContainer.SetActive(false);
+            dayEndPanel.SetActive(false);
+
+            RestoreGoal();
+        }
     }
 }

@@ -8,99 +8,63 @@ namespace Aquarium
     {
         public static CameraManager Instance;
 
-        // key: Room / School / BRoom
-        private Dictionary<string, GameObject> locationCameras = new Dictionary<string, GameObject>();
+        [System.Serializable]
+        public class LocationCamera
+        {
+            public string locationID;                 // ex) W01_Room
+            public CinemachineCamera camera;          // Cinemachine 3.x
+        }
+
+        [Header("Camera Settings")]
+        [SerializeField] private int activePriority = 20;
+        [SerializeField] private int inactivePriority = 0;
+
+        [SerializeField] private List<LocationCamera> cameras;
 
         private void Awake()
         {
             if (Instance == null)
-            {
                 Instance = this;
-            }
             else
             {
                 Destroy(gameObject);
                 return;
             }
-
-            CacheAllLocationCameras();
         }
 
-        private void OnEnable()
-        {
-            LocationEventHub.OnLocationChanged += OnLocationChanged;
-        }
-
-        private void OnDisable()
-        {
-            LocationEventHub.OnLocationChanged -= OnLocationChanged;
-        }
-
-        private void CacheAllLocationCameras()
-        {
-            locationCameras.Clear();
-
-            // 유니티 6 + Cinemachine 3.1.5 방식
-            var cameras = Object.FindObjectsByType<CinemachineCamera>(
-                FindObjectsInactive.Include,
-                FindObjectsSortMode.None
-            );
-
-            foreach (var cam in cameras)
-            {
-                GameObject camObj = cam.gameObject;
-                if (!camObj.name.StartsWith("Camera_"))
-                    continue;
-
-                string locationKey = camObj.name.Replace("Camera_", "");
-                if (!locationCameras.ContainsKey(locationKey))
-                    locationCameras.Add(locationKey, camObj);
-
-                // 기본은 전부 비활성화
-                camObj.SetActive(false);
-            }
-        }
-
-        private void OnLocationChanged(string locationID)
-        {
-            string locationKey = ExtractLocationKey(locationID);
-            ActivateCamera(locationKey);
-        }
-
-        private string ExtractLocationKey(string locationID)
+        /// <summary>
+        /// LocationID 기준으로 CinemachineCamera Priority 전환
+        /// FadeOut ~ FadeIn 사이에서 호출될 것
+        /// </summary>
+        public void SwitchCamera(string locationID)
         {
             if (string.IsNullOrEmpty(locationID))
-                return string.Empty;
-
-            int underscoreIndex = locationID.LastIndexOf('_');
-            if (underscoreIndex < 0)
-                return locationID;
-
-            return locationID.Substring(underscoreIndex + 1);
-        }
-
-        private void ActivateCamera(string locationKey)
-        {
-            if (string.IsNullOrEmpty(locationKey))
-                return;
-
-            foreach (var pair in locationCameras)
-                pair.Value.SetActive(false);
-
-            if (!locationCameras.ContainsKey(locationKey))
             {
-                Debug.LogWarning($"CameraManager: Camera_{locationKey} 를 찾을 수 없습니다.");
+                Debug.LogWarning("[CameraManager] locationID is null or empty");
                 return;
             }
 
-            locationCameras[locationKey].SetActive(true);
-        }
+            bool found = false;
 
-        // Load 직후 / Fade 이전 강제 세팅용
-        public void ForceSetLocation(string locationID)
-        {
-            string locationKey = ExtractLocationKey(locationID);
-            ActivateCamera(locationKey);
+            foreach (var entry in cameras)
+            {
+                if (entry.camera == null)
+                {
+                    Debug.LogError("[CameraManager] CinemachineCamera reference is NULL");
+                    continue;
+                }
+
+                bool isTarget = entry.locationID == locationID;
+                entry.camera.Priority = isTarget ? activePriority : inactivePriority;
+
+                if (isTarget)
+                    found = true;
+            }
+
+            if (!found)
+            {
+                Debug.LogWarning($"[CameraManager] No camera matched locationID = {locationID}");
+            }
         }
     }
 }

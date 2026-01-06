@@ -1,4 +1,5 @@
-/*using System;
+using System;
+using System.Collections;
 using UnityEngine;
 
 namespace Aquarium
@@ -20,85 +21,45 @@ namespace Aquarium
             string targetLocationID,
             Action onComplete = null)
         {
-            // 1️⃣ FadeOut 시작
+            ACon.Instance?.BeginTeleport();
+
             SceneFader.Instance.FadeOut(() =>
             {
-                // 2️⃣ Camera 먼저 전환 (Fade 중이라 화면 안 보임)
-                CameraManager.Instance.SwitchCamera(targetLocationID);
-
-                // 3️⃣ Player 이동
-                var player = GameObject.FindWithTag("Player");
-                player.transform.position = targetSpawnPoint.position;
-                player.transform.rotation = targetSpawnPoint.rotation;
-
-                // 4️⃣ FadeIn
-                SceneFader.Instance.FadeIn(() =>
-                {
-                    onComplete?.Invoke();
-                });
+                StartCoroutine(TeleportSequence(
+                    targetSpawnPoint,
+                    targetLocationID,
+                    onComplete
+                ));
             });
         }
-    }
-}
-*/
-using UnityEngine;
-using UnityEngine.AI;
-using System.Collections;
 
-namespace Aquarium
-{
-    public class TeleportManager : MonoBehaviour
-    {
-        public static TeleportManager Instance;
-
-        [SerializeField] private NavMeshAgent playerAgent;
-
-        private void Awake()
+        private IEnumerator TeleportSequence(
+            Transform targetSpawnPoint,
+            string targetLocationID,
+            Action onComplete)
         {
-            Instance = this;
-        }
+            // 🔒 1️⃣ FadeOut 완전 종료 보장
+            yield return new WaitForEndOfFrame();
 
-        public void Teleport(Transform targetSpawnPos, System.Action onComplete)
-        {
-            StartCoroutine(TeleportRoutine(targetSpawnPos, onComplete));
-        }
+            // 🔥 2️⃣ 카메라 Priority 변경 (화면은 이미 검정)
+            CameraManager.Instance.SwitchCamera(targetLocationID);
 
-        private IEnumerator TeleportRoutine(Transform target, System.Action onComplete)
-        {
-            UIManager.Instance.SetState(UIState.Teleport);
+            // 🔒 3️⃣ Cinemachine Brain이 Priority 평가할 프레임
+            yield return null;
 
-            // 🔹 FadeOut
-            yield return SceneFader.Instance.StartCoroutine(
-                SceneFader.Instance
-                    .GetType()
-                    .GetMethod("FadeOut", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                    .Invoke(SceneFader.Instance, null) as IEnumerator
-            );
-
-            // 🔹 위치 이동
-            playerAgent.enabled = false;
-            playerAgent.transform.position = target.position;
-            playerAgent.enabled = true;
-
-            // 🔹 Location 기준 카메라 재세팅
-            if (!string.IsNullOrEmpty(InteractionRegistry.GetCurrentLocation()))
+            // 🔒 4️⃣ Player 이동
+            var player = GameObject.FindWithTag("Player");
+            if (player != null)
             {
-                CameraManager.Instance.ForceSetLocation(
-                    InteractionRegistry.GetCurrentLocation()
-                );
+                player.transform.position = targetSpawnPoint.position;
+                player.transform.rotation = targetSpawnPoint.rotation;
             }
 
-            // 🔹 FadeIn
-            yield return SceneFader.Instance.StartCoroutine(
-                SceneFader.Instance
-                    .GetType()
-                    .GetMethod("FadeIn", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                    .Invoke(SceneFader.Instance, null) as IEnumerator
-            );
-
-            UIManager.Instance.SetState(UIState.None);
-
-            onComplete?.Invoke();
+            // 🔒 5️⃣ 모든 상태 완료 후 FadeIn
+            SceneFader.Instance.FadeIn(() =>
+            {
+                onComplete?.Invoke();
+            });
         }
     }
 }

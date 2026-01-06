@@ -22,9 +22,19 @@ namespace Aquarium
             if (string.IsNullOrEmpty(locationID))
                 return;
 
+            if (currentLocationID == locationID)
+                return; // 🔥 중복 방지
+
             currentLocationID = locationID;
             Debug.Log($"[InteractionRegistry] Current Location set: {locationID}");
+
+            // 🔥 여기서 카메라 전환
+            if (CameraManager.Instance != null)
+            {
+                CameraManager.Instance.SwitchCamera(locationID);
+            }
         }
+
 
         public static string GetCurrentLocation()
         {
