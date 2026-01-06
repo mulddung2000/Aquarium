@@ -51,8 +51,21 @@ namespace Aquarium
             var player = GameObject.FindWithTag("Player");
             if (player != null)
             {
-                player.transform.position = targetSpawnPoint.position;
-                player.transform.rotation = targetSpawnPoint.rotation;
+                var acon = player.GetComponent<ACon>();
+
+                if (acon != null)
+                {
+                    acon.EndTeleport(
+                        targetSpawnPoint.position,
+                        targetSpawnPoint.rotation
+                    );
+                }
+                else
+                {
+                    // 안전장치
+                    player.transform.position = targetSpawnPoint.position;
+                    player.transform.rotation = targetSpawnPoint.rotation;
+                }
             }
 
             // 🔒 5️⃣ 모든 상태 완료 후 FadeIn

@@ -33,13 +33,19 @@ namespace Aquarium
             }
 
             // ==============================
-            // 2️⃣ Player 위치 복원
-            // (NavMeshAgent는 PlayerLoadRestorer가 담당)
+            // 2️⃣ Player 위치 복원 (NavMesh 안전)
             // ==============================
             var player = GameObject.FindWithTag("Player");
-            if (player != null)
+            if (player != null && PlayerLoadRestorer.Instance != null)
             {
-                player.transform.position = data.playerPosition;
+                // 임시 Transform 생성 (좌표만 필요)
+                var temp = new GameObject("[Temp_LoadSpawn]");
+                temp.transform.position = data.playerPosition;
+                temp.transform.rotation = player.transform.rotation;
+
+                PlayerLoadRestorer.Instance.RestoreTo(temp.transform);
+
+                Destroy(temp);
             }
 
             // ==============================
@@ -82,8 +88,12 @@ namespace Aquarium
             if (string.IsNullOrEmpty(interactionID))
                 return;
 
+            // 🔥 Unity 6 대응: 비활성 Interaction 포함 검색
             var allInteractions =
-                Object.FindObjectsByType<InteractiveObject>(FindObjectsSortMode.None);
+                Object.FindObjectsByType<InteractiveObject>(
+                    FindObjectsInactive.Include,
+                    FindObjectsSortMode.None
+                );
 
             InteractiveObject target = null;
 
@@ -98,11 +108,13 @@ namespace Aquarium
 
             if (target == null)
             {
-                Debug.LogWarning($"[LoadApplier] Interaction not found: {interactionID}");
+                Debug.LogError(
+                    $"[LoadApplier] CRITICAL: Interaction not found even including inactive: {interactionID}"
+                );
                 return;
             }
 
-            // 🔥 Load 중에는 UI는 건드리지 않고 활성화만
+            // 🔥 반드시 활성화
             if (!target.gameObject.activeSelf)
                 target.gameObject.SetActive(true);
 
