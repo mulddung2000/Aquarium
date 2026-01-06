@@ -12,8 +12,8 @@ EditorBuildSettings:
     path: Assets/Aquarium/Scenes/Week01.unity
     guid: 6192a03d221698f4f9cdf1350ecd97f8
   - enabled: 1
-    path: Assets/Aquarium/Scenes/Week02.unity
-    guid: 63e744551b90043459ba10f486fc72b4
+    path: Assets/Aquarium/Scenes/Week01-1.unity
+    guid: a1d5b04ce14fa1247b18b46589bc7c79
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

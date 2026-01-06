@@ -130,6 +130,8 @@ namespace Aquarium
                     return "학교";
                 case "BRoom":
                     return "발레 연습실";
+                case "Kitchen":
+                    return "거실";
                 default:
                     // 정의되지 않은 장소는 그대로 노출 (디버그 목적)
                     return placeCode;
