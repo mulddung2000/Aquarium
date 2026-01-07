@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Aquarium/Scenes/MainMenu.unity
+    guid: 59e737e13eb8e9e428150ce409d8dda5
+  - enabled: 1
     path: Assets/Aquarium/Scenes/SaveSlotScene.unity
     guid: 7a5a2425d6f95f240ba0d2b29e1dc57c
   - enabled: 1
