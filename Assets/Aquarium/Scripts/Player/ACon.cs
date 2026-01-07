@@ -8,6 +8,7 @@ namespace Aquarium
         public static ACon Instance;
 
         private NavMeshAgent agent;
+        private Animator animator;
 
         private InteractiveObject currentTarget;
         private bool isMovingToInteraction;
@@ -20,6 +21,7 @@ namespace Aquarium
                 Destroy(gameObject);
 
             agent = GetComponent<NavMeshAgent>();
+            animator = GetComponent<Animator>();
         }
 
         private void Update()
@@ -35,6 +37,8 @@ namespace Aquarium
             {
                 CheckInteractionDistance();
             }
+
+            MoveSpeed();
         }
 
         public void BeginTeleport()
@@ -97,6 +101,12 @@ namespace Aquarium
             {
                 agent.SetDestination(hit.point);
             }
+        }
+
+        private void MoveSpeed()
+        {
+            float currentSpeed = agent.velocity.magnitude;
+            animator.SetFloat("Speed", currentSpeed);
         }
     }
 }

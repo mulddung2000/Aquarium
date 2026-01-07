@@ -293,7 +293,8 @@ PrefabInstance:
       value: Aquarium (1)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 1703139541410877578, guid: 0df0fee1f60a11044b4bf8447beb7959, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0df0fee1f60a11044b4bf8447beb7959, type: 3}
@@ -356,7 +357,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 100
+  far clip plane: 1000
   field of view: 10
   orthographic: 0
   orthographic size: 5
