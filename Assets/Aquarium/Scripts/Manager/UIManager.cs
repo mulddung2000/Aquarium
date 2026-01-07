@@ -36,6 +36,7 @@ namespace Aquarium
 
         [Header("Day End UI")]
         [SerializeField] private GameObject dayEndPanel;
+        [SerializeField] private TextMeshProUGUI dayEndText;
 
         private UIState currentState = UIState.None;
 
@@ -204,7 +205,13 @@ namespace Aquarium
         #region DayEnd
         public void ShowDayEnd()
         {
-            SetGoal("End Week");
+            // 🔑 Goal은 플레이어 행동 가이드 (한글)
+            SetGoal("다음 주로 넘어가기");
+
+            // 🔑 DayEnd UI는 상태 이름 (영어)
+            if (dayEndText != null)
+                dayEndText.text = "End Week";
+
             SetState(UIState.DayEnd);
         }
         #endregion

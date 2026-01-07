@@ -29,6 +29,9 @@ namespace Aquarium
 
         [Header("Location ID")]
         [SerializeField] private string locationID;
+
+        [Header("Indicator")]
+        [SerializeField] private InteractionIndicator interactionIndicator;
         #endregion
 
         #region Properties
@@ -41,7 +44,10 @@ namespace Aquarium
         #region Unity Events
         private void OnEnable()
         {
-            // 🔥 로드 중이면 Interaction은 켜되, UI는 LoadApplier가 담당
+            // Indicator는 항상 즉시 ON
+            interactionIndicator?.Show();
+
+            // 🔥 로드 중이면 UI / Registry 건드리지 않음
             if (SaveManager.Instance != null && SaveManager.Instance.IsLoading)
                 return;
 
@@ -53,6 +59,11 @@ namespace Aquarium
 
             if (!string.IsNullOrEmpty(goalText) && UIManager.Instance != null)
                 UIManager.Instance.SetGoal(goalText);
+        }
+
+        private void OnDisable()
+        {
+            interactionIndicator?.Hide();
         }
 
         private void OnMouseEnter()
@@ -74,16 +85,17 @@ namespace Aquarium
         #region Interaction
         public void ExecuteInteraction()
         {
-            // Door Interaction
             if (isDoor)
             {
                 UIManager.Instance.SetState(UIState.Teleport);
-
-                TeleportManager.Instance.Teleport(targetSpawnPoint,locationID,OnTeleportFinished);
+                TeleportManager.Instance.Teleport(
+                    targetSpawnPoint,
+                    locationID,
+                    OnTeleportFinished
+                );
                 return;
             }
 
-            // Dialogue Interaction
             if (dialogueLines == null || dialogueLines.Length == 0)
             {
                 FinishInteraction();
@@ -116,9 +128,7 @@ namespace Aquarium
 
                 var nextIO = nextInteraction.GetComponent<InteractiveObject>();
                 if (nextIO != null)
-                {
                     InteractionRegistry.SetCurrentInteraction(nextIO.InteractionID);
-                }
             }
             else
             {

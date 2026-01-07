@@ -6,8 +6,6 @@ namespace Aquarium
 {
     public class DayEndButton : MonoBehaviour
     {
-        [SerializeField] private string targetSceneName = "Week01";
-
         private Button button;
 
         private void Awake()
@@ -18,16 +16,27 @@ namespace Aquarium
 
         private void OnClick()
         {
-            if (SceneFader.Instance == null)
+            int currentIndex = SceneManager.GetActiveScene().buildIndex;
+            int nextIndex = currentIndex + 1;
+
+            // 🔥 빌드 인덱스 초과 방지 (프로토타입 안전장치)
+            if (nextIndex >= SceneManager.sceneCountInBuildSettings)
             {
-                SceneManager.LoadScene(targetSceneName);
+                Debug.LogWarning("[DayEndButton] Next scene index out of range");
                 return;
             }
 
-            SceneFader.Instance.FadeOut(() =>
+            if (SceneFader.Instance != null)
             {
-                SceneManager.LoadScene(targetSceneName);
-            });
+                SceneFader.Instance.FadeOut(() =>
+                {
+                    SceneManager.LoadScene(nextIndex);
+                });
+            }
+            else
+            {
+                SceneManager.LoadScene(nextIndex);
+            }
         }
     }
 }
